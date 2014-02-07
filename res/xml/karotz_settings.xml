@@ -1,0 +1,14 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <EditTextPreference
+        android:id="@+id/prefKarotzHost"
+        android:defaultValue=""
+        android:inputType="text"
+        android:key="prefKarotzHost"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/karotz_host_pref_summary"
+        android:title="@string/karotz_host_pref_title" />
+
+</PreferenceScreen>

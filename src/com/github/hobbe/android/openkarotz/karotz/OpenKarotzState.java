@@ -1,0 +1,131 @@
+package com.github.hobbe.android.openkarotz.karotz;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.graphics.Color;
+import android.util.Log;
+
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+
+/**
+ * Status for OpenKarotz.
+ */
+public class OpenKarotzState {
+
+    /**
+     * Initialize a new status.
+     */
+    public OpenKarotzState() {
+        // Nothing to do
+    }
+
+    /**
+     * Initialize a new status from a JSON input.
+     * @param json the JSON string
+     */
+    public OpenKarotzState(String json) {
+        // Answer:
+        // {"version":"200","ears_disabled":"0","sleep":"0","sleep_time":"0","led_color":"0000FF","led_pulse":"1","tts_cache_size":"4","usb_free_space":"-1","karotz_free_space":"148.4M","eth_mac":"00:00:00:00:00:00","wlan_mac":"01:23:45:67:89:AB","nb_tags":"4","nb_moods":"305","nb_sounds":"14","nb_stories":"0","karotz_percent_used_space":"37","usb_percent_used_space":""}
+        if (json != null) {
+            try {
+                JSONObject jo = new JSONObject(json);
+                version = jo.getString(KEY_VERSION);
+                status = ("1".equals(jo.getString(KEY_SLEEP)) ? KarotzStatus.SLEEPING : KarotzStatus.AWAKE);
+                ledColor = Color.parseColor("#" + jo.getString(KEY_LED_COLOR));
+                pulsing = ("1".equals(jo.getString(KEY_LED_PULSE)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Cannot parse status answer: " + json);
+                status = KarotzStatus.UNKNOWN;
+            }
+
+        } else {
+            status = KarotzStatus.UNKNOWN;
+        }
+    }
+
+    /**
+     * Get the LED color.
+     * @return the ledColor
+     */
+    public int getLedColor() {
+        return ledColor & 0x00FFFFFF;
+    }
+
+    /**
+     * Get the status.
+     * @return the status
+     */
+    public KarotzStatus getStatus() {
+        return status;
+    }
+
+    /**
+     * Get the version.
+     * @return the version
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * Check if LED is pulsing.
+     * @return the {@code true} if LED is pulsing, else {@code false}
+     */
+    public boolean isPulsing() {
+        return pulsing;
+    }
+
+    /**
+     * Set the LED color.
+     * @param color the color to set
+     */
+    public void setLedColor(int color) {
+        this.ledColor = color & 0x00FFFFFF;
+    }
+
+    /**
+     * Set the LED pulsing state.
+     * @param pulsing the pulsing state to set
+     */
+    public void setPulsing(boolean pulsing) {
+        this.pulsing = pulsing;
+    }
+
+    /**
+     * Set the Karotz status.
+     * @param status the status to set
+     */
+    public void setStatus(KarotzStatus status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("OpenKarotzState { \"version\": \"");
+        sb.append(version);
+        sb.append("\", \"status\": \"");
+        sb.append(status.name());
+        sb.append("\", \"color\": \"");
+        sb.append(Integer.toHexString(ledColor));
+        sb.append("\", \"pulse\": \"");
+        sb.append(pulsing ? "1" : "0");
+        sb.append("\" }");
+        return sb.toString();
+    }
+
+
+    private String version = null;
+    private KarotzStatus status = KarotzStatus.UNKNOWN;
+    private int ledColor = Color.GREEN;
+    private boolean pulsing = true;
+
+    private static final String KEY_VERSION = "version";
+    private static final String KEY_SLEEP = "sleep";
+    private static final String KEY_LED_COLOR = "led_color";
+    private static final String KEY_LED_PULSE = "led_pulse";
+
+    private static final String TAG = "OpenKarotzState";
+}

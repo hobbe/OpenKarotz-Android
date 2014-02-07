@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Strings related to application -->
+
+    <string name="app_name">OpenKarotz</string>
+    <string name="title_activity_settings">Paramètres</string>
+    <string name="action_about">A propos</string>
+    <string name="action_settings">Paramètres</string>
+
+    <!-- Strings related to Main -->
+
+    <string name="version">Version</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- Strings related to System fragment -->
+
+    <string name="version_label">Version OpenKarotz</string>
+    <string name="onoff_label">État du Karotz</string>
+    <string name="err_cannot_getversion">Impossible de récupérer la version du Karotz, vérifier les paramètres</string>
+    <string name="err_cannot_wakeup">Impossible de réveiller le Karotz, vérifier les paramètres</string>
+    <string name="err_cannot_sleep">Impossible d\'endormir le Karotz, vérifier les paramètres</string>
+
+    <!-- Strings related to Settings -->
+
+    <string name="karotz_host_pref_title">Adresse du Karotz</string>
+    <string name="karotz_host_pref_summary">Nom d\'hôte ou adresse IP :</string>
+
+</resources>
