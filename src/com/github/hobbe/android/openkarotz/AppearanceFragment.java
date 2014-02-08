@@ -32,7 +32,9 @@ import java.io.IOException;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -83,21 +85,41 @@ public class AppearanceFragment extends Fragment {
 
         // Color button layout
         colorLayout = (LinearLayout) view.findViewById(R.id.layoutColors);
-        // colorButton.setOnClickListener();
+
         for (String c : COLORS) {
             int color = Color.parseColor('#' + c);
-            Button btn = new Button(getActivity());
-            btn.setBackgroundColor(color);
-            btn.setWidth(60);
-            btn.setHeight(60);
-            btn.setPadding(2, 2, 2, 2);
+
+            // Button
+            Button btn = new ColorButton(getActivity(), color);
             btn.setOnClickListener(new ColorButtonOnClickListener(color));
+
             colorLayout.addView(btn, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         }
 
         return view;
     }
 
+
+    private class ColorButton extends Button {
+
+        public ColorButton(Context context, int color) {
+            super(context);
+            setId(color);
+            setWidth(60);
+            setHeight(60);
+
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColors(new int[] {
+                    color, Color.WHITE
+            });
+            gd.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+            gd.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
+            gd.setCornerRadius(24);
+            gd.setStroke(1, Color.GRAY);
+
+            setBackground(gd);
+        }
+    }
 
     private class ColorButtonOnClickListener implements OnClickListener {
 
@@ -226,8 +248,9 @@ public class AppearanceFragment extends Fragment {
     private LinearLayout colorLayout = null;
 
     private static final String[] COLORS = {
-            "000000", "FFFFFF", "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF"
+            "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF", "FFFFFF", "000000"
     };
 
     private static final String TAG = "AppearanceFragment";
+
 }
