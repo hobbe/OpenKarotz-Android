@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.hobbe.android.openkarotz"
     android:installLocation="auto"
-    android:versionCode="2"
+    android:versionCode="3"
     android:versionName="0.1" >
 
-    <!-- Android 4.0 (API14) minimum -->
+    <!-- Android 4.1.2 (API16) minimum -->
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
     <!-- Permission to perform network operations -->
