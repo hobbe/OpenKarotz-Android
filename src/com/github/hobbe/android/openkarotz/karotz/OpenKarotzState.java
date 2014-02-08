@@ -1,3 +1,31 @@
+/*
+ * OpenKarotz-Android
+ * http://github.com/hobbe/OpenKarotz-Android
+ *
+ * Copyright (c) 2014 Olivier Bagot (http://github.com/hobbe)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
 package com.github.hobbe.android.openkarotz.karotz;
 
 import org.json.JSONException;
@@ -22,6 +50,7 @@ public class OpenKarotzState {
 
     /**
      * Initialize a new status from a JSON input.
+     * 
      * @param json the JSON string
      */
     public OpenKarotzState(String json) {
@@ -47,6 +76,7 @@ public class OpenKarotzState {
 
     /**
      * Get the LED color.
+     * 
      * @return the ledColor
      */
     public int getLedColor() {
@@ -55,6 +85,7 @@ public class OpenKarotzState {
 
     /**
      * Get the status.
+     * 
      * @return the status
      */
     public KarotzStatus getStatus() {
@@ -63,6 +94,7 @@ public class OpenKarotzState {
 
     /**
      * Get the version.
+     * 
      * @return the version
      */
     public String getVersion() {
@@ -71,6 +103,7 @@ public class OpenKarotzState {
 
     /**
      * Check if LED is pulsing.
+     * 
      * @return the {@code true} if LED is pulsing, else {@code false}
      */
     public boolean isPulsing() {
@@ -79,6 +112,7 @@ public class OpenKarotzState {
 
     /**
      * Set the LED color.
+     * 
      * @param color the color to set
      */
     public void setLedColor(int color) {
@@ -87,6 +121,7 @@ public class OpenKarotzState {
 
     /**
      * Set the LED pulsing state.
+     * 
      * @param pulsing the pulsing state to set
      */
     public void setPulsing(boolean pulsing) {
@@ -95,6 +130,7 @@ public class OpenKarotzState {
 
     /**
      * Set the Karotz status.
+     * 
      * @param status the status to set
      */
     public void setStatus(KarotzStatus status) {
@@ -118,13 +154,19 @@ public class OpenKarotzState {
 
 
     private String version = null;
+
     private KarotzStatus status = KarotzStatus.UNKNOWN;
+
     private int ledColor = Color.GREEN;
+
     private boolean pulsing = true;
 
     private static final String KEY_VERSION = "version";
+
     private static final String KEY_SLEEP = "sleep";
+
     private static final String KEY_LED_COLOR = "led_color";
+
     private static final String KEY_LED_PULSE = "led_pulse";
 
     private static final String TAG = "OpenKarotzState";

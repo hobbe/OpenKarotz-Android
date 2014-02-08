@@ -1,3 +1,31 @@
+/*
+ * OpenKarotz-Android
+ * http://github.com/hobbe/OpenKarotz-Android
+ *
+ * Copyright (c) 2014 Olivier Bagot (http://github.com/hobbe)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * http://opensource.org/licenses/MIT
+ *
+ */
+
 package com.github.hobbe.android.openkarotz.karotz;
 
 import java.io.IOException;
@@ -19,6 +47,7 @@ public class OpenKarotz implements IKarotz {
 
     /**
      * Initialize a new OpenKarotz instance.
+     * 
      * @param hostname the hostname or IP
      */
     public OpenKarotz(String hostname) {
@@ -81,7 +110,7 @@ public class OpenKarotz implements IKarotz {
             return;
         }
 
-        String c = Integer.toHexString(rgb);
+        String c = toColorCode(rgb);
 
         URL url = new URL(api, CGI_BIN + "/leds?color=" + c + (pulse ? "&pulse=1" : ""));
         Log.d(TAG, url.toString());
@@ -170,9 +199,19 @@ public class OpenKarotz implements IKarotz {
         Log.d(TAG, state.toString());
     }
 
+    private String toColorCode(int c) {
+        String cc = Integer.toHexString(c);
+        while (cc.length() < 6) {
+            cc = '0' + cc;
+        }
+        return cc;
+    }
+
 
     private final String hostname;
+
     private URL api = null;
+
     private OpenKarotzState state = null;
 
     private static final String PROTOCOL = "http";
