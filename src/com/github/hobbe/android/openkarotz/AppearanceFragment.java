@@ -39,6 +39,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -105,20 +106,47 @@ public class AppearanceFragment extends Fragment {
         public ColorButton(Context context, int color) {
             super(context);
             setId(color);
-            setWidth(60);
-            setHeight(60);
+            setWidth(80);
+            setHeight(80);
 
-            GradientDrawable gd = new GradientDrawable();
-            gd.setColors(new int[] {
+            gdNormal = new GradientDrawable();
+            gdNormal.setColors(new int[] {
                     color, Color.WHITE
             });
-            gd.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-            gd.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
-            gd.setCornerRadius(24);
-            gd.setStroke(1, Color.GRAY);
+            gdNormal.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+            gdNormal.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
+            gdNormal.setCornerRadius(12);
+            gdNormal.setStroke(1, Color.GRAY);
 
-            setBackground(gd);
+            gdTouch = new GradientDrawable();
+            gdTouch.setColors(new int[] {
+                    color, Color.GRAY
+            });
+            gdTouch.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+            gdTouch.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
+            gdTouch.setCornerRadius(12);
+            gdTouch.setStroke(1, Color.DKGRAY);
+
+            setOnTouchListener(new OnTouchListener() {
+
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        setBackground(gdTouch);
+                    } else {
+                        setBackground(gdNormal);
+                    }
+                    // Do not consume event so that the onClick handler works
+                    return false;
+                }
+            });
+
+            setBackground(gdNormal);
         }
+
+
+        private final GradientDrawable gdNormal;
+        private final GradientDrawable gdTouch;
     }
 
     private class ColorButtonOnClickListener implements OnClickListener {
