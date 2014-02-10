@@ -28,17 +28,22 @@
 
 package com.github.hobbe.android.openkarotz;
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +52,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.net.NetUtils;
 
 /**
  * Main activity.
@@ -81,11 +89,10 @@ public class MainActivity extends Activity {
         // Handle other action bar items...
         switch (item.getItemId()) {
         case R.id.action_settings:
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivityForResult(i, RESULT_SETTINGS);
+            doActionSettings();
             return true;
         case R.id.action_about:
-            Toast.makeText(MainActivity.this, getString(R.string.version) + " " + getVersion(), Toast.LENGTH_LONG).show();
+            doActionAbout();
             return true;
         default:
             break;
@@ -158,9 +165,6 @@ public class MainActivity extends Activity {
 
         // Enabling Up navigation
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Set up Karotz instance
-        initializeKarotz();
     }
 
     @Override
@@ -169,6 +173,35 @@ public class MainActivity extends Activity {
 
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
+
+        // Check network connection
+        if (NetUtils.isNetworkConnectionAvailable(this)) {
+
+            // Set up Karotz instance
+            new GetStatusTask().execute();
+
+        } else {
+            Toast.makeText(MainActivity.this, getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void doActionAbout() {
+        Toast.makeText(MainActivity.this, getString(R.string.version) + " " + getVersion(), Toast.LENGTH_LONG).show();
+    }
+
+    private void doActionSettings() {
+        Log.d(TAG, "Launching settings activity...");
+        Intent i = new Intent(this, SettingsActivity.class);
+        startActivityForResult(i, RESULT_SETTINGS);
+    }
+
+    private String getPrefKarotzHost() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String h = prefs.getString(SettingsActivity.KEY_PREF_KAROTZ_HOST, null);
+        if (h != null && h.length() <= 0) {
+            h = null;
+        }
+        return h;
     }
 
     private String getVersion() {
@@ -182,8 +215,13 @@ public class MainActivity extends Activity {
     }
 
     private void initializeKarotz() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String hostname = prefs.getString(SettingsActivity.KEY_PREF_KAROTZ_HOST, "");
+        Log.d(TAG, "Initializing Karotz...");
+        String hostname = getPrefKarotzHost();
+        if (hostname == null) {
+            Log.d(TAG, "Preference Karotz Host not set");
+            doActionSettings();
+        }
+
         Karotz.initialize(hostname);
     }
 
@@ -274,6 +312,57 @@ public class MainActivity extends Activity {
         }
     }
 
+    private class GetStatusTask extends AsyncTask<Void, Void, KarotzStatus> {
+
+        @Override
+        protected KarotzStatus doInBackground(Void... params) {
+
+            // Set up Karotz instance
+            initializeKarotz();
+
+            try {
+                return Karotz.getInstance().getStatus();
+            } catch (IOException e) {
+                Log.e(TAG, "Cannot get Karotz status: " + e.getMessage());
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(KarotzStatus result) {
+            pd.dismiss();
+            pd = null;
+
+            // Check Karotz status
+            if (result != null) {
+                switch (result) {
+                case AWAKE:
+                    // Fall-through
+                case SLEEPING:
+                    break;
+                case UNKNOWN:
+                    // Fall-through
+                case OFFLINE:
+                    // Fall-through
+                default:
+                    Toast.makeText(MainActivity.this, getString(R.string.err_cannot_connect), Toast.LENGTH_LONG).show();
+                    break;
+                }
+            } else {
+                Toast.makeText(MainActivity.this, getString(R.string.err_cannot_connect), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // TODO: I18N
+            pd = ProgressDialog.show(MainActivity.this, "Loading", "Please wait...");
+        }
+
+
+        private ProgressDialog pd = null;
+    }
+
 
     private CharSequence appTitle = null;
 
@@ -293,4 +382,5 @@ public class MainActivity extends Activity {
 
     private static final int PAGE_SYSTEM = 1;
 
+    private static final String TAG = "MainActivity";
 }

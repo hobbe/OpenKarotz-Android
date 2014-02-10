@@ -13,6 +13,8 @@
     <string name="version">Version</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="err_no_connection">Internet connection is not active, configure your device</string>
+    <string name="err_cannot_connect">Cannot communicate with Karotz, check host name in settings</string>
 
     <!-- Strings related to System fragment -->
 
