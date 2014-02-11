@@ -37,7 +37,7 @@ public interface IKarotz {
 
     /**
      * Get the Karotz LED color.
-     * 
+     *
      * @return the LED color
      * @throws IOException if an I/O error occurs
      */
@@ -45,14 +45,14 @@ public interface IKarotz {
 
     /**
      * Get the Karotz hostname.
-     * 
+     *
      * @return the hostname
      */
     String getHostname();
 
     /**
      * Get the Karotz status.
-     * 
+     *
      * @return the status
      * @throws IOException if an I/O error occurs
      */
@@ -60,7 +60,7 @@ public interface IKarotz {
 
     /**
      * Get the Karotz version.
-     * 
+     *
      * @return the version
      * @throws IOException if an I/O error occurs
      */
@@ -68,7 +68,7 @@ public interface IKarotz {
 
     /**
      * Check if Karotz LED is pulsing.
-     * 
+     *
      * @return the
      * @throws IOException if an I/O error occurs
      */
@@ -76,7 +76,7 @@ public interface IKarotz {
 
     /**
      * Change LED color and pulse.
-     * 
+     *
      * @param color the LED color
      * @param pulse if {@code true}, LED will pulse
      * @throws IOException if an I/O error occurs
@@ -85,18 +85,20 @@ public interface IKarotz {
 
     /**
      * Put Karotz to sleep.
-     * 
+     * @return {@code true} if action was successful, else {@code false}. If Karotz was already sleeping, {@code true} is returned.
+     *
      * @throws IOException if an I/O error occurs
      */
-    void sleep() throws IOException;
+    boolean sleep() throws IOException;
 
     /**
      * Wake up Karotz.
-     * 
+     *
      * @param silent if {@code true}, no sound is played on wake up
+     * @return {@code true} if action was successful, else {@code false}.
      * @throws IOException if an I/O error occurs
      */
-    void wakeup(boolean silent) throws IOException;
+    boolean wakeup(boolean silent) throws IOException;
 
 
     /**
@@ -118,7 +120,7 @@ public interface IKarotz {
 
         /**
          * Check if this status corresponds to an offline status.
-         * 
+         *
          * @return {@code true} if this is an offline status
          */
         public boolean isOffline() {
@@ -127,7 +129,7 @@ public interface IKarotz {
 
         /**
          * Check if this status corresponds to an online status.
-         * 
+         *
          * @return {@code true} if this is an online status
          */
         public boolean isOnline() {

@@ -47,7 +47,7 @@ public class OpenKarotz implements IKarotz {
 
     /**
      * Initialize a new OpenKarotz instance.
-     * 
+     *
      * @param hostname the hostname or IP
      */
     public OpenKarotz(String hostname) {
@@ -119,23 +119,31 @@ public class OpenKarotz implements IKarotz {
         Log.d(TAG, result);
 
         // Answer: {"color":"0000FF","secondary_color":"000000","pulse":"0","no_memory":"0","speed":"700","return":"0"}
+        // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
         try {
             JSONObject json = new JSONObject(result);
-            state.setLedColor(Color.parseColor("#" + json.getString("color")));
-            state.setPulsing("1".equals(json.getString("pulse")));
+            boolean ok = "0".equals(json.getString("return"));
+
+            if (ok) {
+                state.setLedColor(Color.parseColor("#" + json.getString("color")));
+                state.setPulsing("1".equals(json.getString("pulse")));
+                return;
+            }
         } catch (JSONException e) {
-            e.printStackTrace();
-            state.setLedColor(rgb);
-            state.setPulsing(pulse);
+            Log.e(TAG, "Cannot change LED on Kartoz: " + e.getMessage(), e);
         }
+
+        // Not OK, set back to previous values
+        state.setLedColor(rgb);
+        state.setPulsing(pulse);
     }
 
     @Override
-    public void sleep() throws IOException {
+    public boolean sleep() throws IOException {
         if (isSleeping()) {
             // No change
             Log.d(TAG, "Already sleeping, no need to go to sleep");
-            return;
+            return true;
         }
 
         URL url = new URL(api, CGI_BIN + "/sleep");
@@ -145,20 +153,24 @@ public class OpenKarotz implements IKarotz {
         Log.d(TAG, result);
 
         // Answer: {"return":"0"}
+        // Answer: {"return":"1","msg":"Unable to perform action, rabbit is already sleeping."}
         try {
             JSONObject json = new JSONObject(result);
-            state.setStatus("0".equals(json.getString("return")) ? KarotzStatus.SLEEPING : KarotzStatus.UNKNOWN);
+            state.setStatus("0".equals(json.getString("return")) ? KarotzStatus.SLEEPING : KarotzStatus.AWAKE);
+            return true;
         } catch (JSONException e) {
             state.setStatus(KarotzStatus.UNKNOWN);
+            return false;
         }
+
     }
 
     @Override
-    public void wakeup(boolean silent) throws IOException {
+    public boolean wakeup(boolean silent) throws IOException {
         if (isAwake()) {
             // No change
             Log.d(TAG, "Already awake, no need to wake up");
-            return;
+            return true;
         }
 
         URL url = new URL(api, CGI_BIN + "/wakeup" + (silent ? "?silent=1" : ""));
@@ -174,6 +186,8 @@ public class OpenKarotz implements IKarotz {
         } catch (JSONException e) {
             state.setStatus(KarotzStatus.UNKNOWN);
         }
+
+        return (state.getStatus() == KarotzStatus.AWAKE);
     }
 
     private boolean isAwake() {

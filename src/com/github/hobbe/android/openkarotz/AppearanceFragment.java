@@ -30,12 +30,11 @@ package com.github.hobbe.android.openkarotz;
 
 import java.io.IOException;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +47,10 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+
+import com.github.hobbe.android.openkarotz.task.GetColorAsyncTask;
+import com.github.hobbe.android.openkarotz.task.GetPulseAsyncTask;
+import com.github.hobbe.android.openkarotz.task.LedAsyncTask;
 
 /**
  * Appearance fragment.
@@ -76,15 +79,20 @@ public class AppearanceFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.page_appearance, container, false);
 
-        new GetColorTask().execute();
-
         // Pulse status
-        pulseSwitch = (Switch) view.findViewById(R.id.switchPulse);
-        pulseSwitch.setOnCheckedChangeListener(new PulseSwitchCheckedChangeListener());
-
-        new GetPulseTask().execute();
+        initializePulseSwitch(view);
 
         // Color button layout
+        initializeColorLayout(view);
+
+        // Load default values
+        new GetPulseTask(getActivity()).execute();
+        new GetColorTask(getActivity()).execute();
+
+        return view;
+    }
+
+    private void initializeColorLayout(View view) {
         colorLayout = (LinearLayout) view.findViewById(R.id.layoutColors);
 
         for (String c : COLORS) {
@@ -96,8 +104,12 @@ public class AppearanceFragment extends Fragment {
 
             colorLayout.addView(btn, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         }
+    }
 
-        return view;
+    private void initializePulseSwitch(View view) {
+        pulseSwitch = (Switch) view.findViewById(R.id.switchPulse);
+        pulseSwitchCheckedChangeListener = new PulseSwitchCheckedChangeListener();
+        pulseSwitch.setOnCheckedChangeListener(pulseSwitchCheckedChangeListener);
     }
 
 
@@ -106,8 +118,8 @@ public class AppearanceFragment extends Fragment {
         public ColorButton(Context context, int color) {
             super(context);
             setId(color);
-            setWidth(80);
-            setHeight(80);
+            setWidth(100);
+            setHeight(100);
 
             gdNormal = new GradientDrawable();
             gdNormal.setColors(new int[] {
@@ -120,7 +132,7 @@ public class AppearanceFragment extends Fragment {
 
             gdTouch = new GradientDrawable();
             gdTouch.setColors(new int[] {
-                    color, Color.GRAY
+                    color, Color.LTGRAY
             });
             gdTouch.setGradientType(GradientDrawable.LINEAR_GRADIENT);
             gdTouch.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
@@ -157,99 +169,56 @@ public class AppearanceFragment extends Fragment {
 
         @Override
         public void onClick(View btn) {
-            Log.d(TAG, "Color button clicked: " + Integer.toHexString(color));
-            new LedChangeTask(color).execute();
-        }
-
-
-        private int color = 0;
-    }
-
-    private class GetColorTask extends AsyncTask<Void, Void, Integer> {
-
-        @Override
-        protected Integer doInBackground(Void... params) {
-
-            try {
-                return Integer.valueOf(Karotz.getInstance().getColor());
-            } catch (IOException e) {
-                Log.e(TAG, "Cannot get Karotz color: " + e.getMessage());
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Integer result) {
-            if (result != null) {
-                // TODO: update color
-            }
-
-            pd.dismiss();
-            pd = null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            // TODO: I18N
-            pd = ProgressDialog.show(getActivity(), "Loading", "Please wait...");
-        }
-
-
-        private ProgressDialog pd = null;
-    }
-
-    private class GetPulseTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            try {
-                return Boolean.valueOf(Karotz.getInstance().isPulsing());
-            } catch (IOException e) {
-                Log.e(TAG, "Cannot get Karotz pulsing state: " + e.getMessage());
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if (result != null) {
-                pulseSwitch.setChecked(result.booleanValue());
-            }
-        }
-    }
-
-    private class LedChangeTask extends AsyncTask<Void, Void, Void> {
-
-        public LedChangeTask() throws IOException {
-            this(Karotz.getInstance().getColor());
-        }
-
-        public LedChangeTask(int color) {
-            this.color = color;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
+            Log.d(LOG_TAG, "Color button clicked: " + Integer.toHexString(color));
             boolean pulse = pulseSwitch.isChecked();
-
-            try {
-                Karotz.getInstance().led(color, pulse);
-            } catch (IOException e) {
-                Log.e(TAG, "Cannot change Karotz LED color: " + e.getMessage());
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            // Nothing?
+            new LedChangeTask(getActivity(), color, pulse).execute();
         }
 
 
         private int color = 0;
+    }
+
+    private class GetColorTask extends GetColorAsyncTask {
+
+        public GetColorTask(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void postExecute(Object result) {
+            if (result != null) {
+                // TODO: update color selection
+            }
+        }
+    }
+
+    private class GetPulseTask extends GetPulseAsyncTask {
+
+        public GetPulseTask(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void postExecute(Object result) {
+            boolean pulsing = ((Boolean) result).booleanValue();
+            if (pulsing) {
+                // Check switch, without triggering listener
+                pulseSwitch.setOnCheckedChangeListener(null);
+                pulseSwitch.setChecked(pulsing);
+                pulseSwitch.setOnCheckedChangeListener(pulseSwitchCheckedChangeListener);
+            }
+        }
+    }
+
+    private class LedChangeTask extends LedAsyncTask {
+
+        public LedChangeTask(Activity activity, boolean pulse) throws IOException {
+            this(activity, Karotz.getInstance().getColor(), pulse);
+        }
+
+        public LedChangeTask(Activity activity, int color, boolean pulse) {
+            super(activity, color, pulse);
+        }
     }
 
     private class PulseSwitchCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
@@ -260,10 +229,10 @@ public class AppearanceFragment extends Fragment {
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            Log.d(TAG, "Pulse ON/OFF " + (isChecked ? "" : "un") + "checked");
+            Log.d(LOG_TAG, "Pulse ON/OFF " + (isChecked ? "" : "un") + "checked");
             LedChangeTask task = null;
             try {
-                task = new LedChangeTask();
+                task = new LedChangeTask(getActivity(), isChecked);
             } catch (IOException e) {
                 return;
             }
@@ -273,12 +242,14 @@ public class AppearanceFragment extends Fragment {
 
 
     private Switch pulseSwitch = null;
+    private PulseSwitchCheckedChangeListener pulseSwitchCheckedChangeListener = null;
+
     private LinearLayout colorLayout = null;
 
     private static final String[] COLORS = {
             "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF", "FFFFFF", "000000"
     };
 
-    private static final String TAG = "AppearanceFragment";
+    private static final String LOG_TAG = AppearanceFragment.class.getName();
 
 }

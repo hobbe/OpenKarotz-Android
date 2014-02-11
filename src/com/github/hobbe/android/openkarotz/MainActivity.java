@@ -28,16 +28,12 @@
 
 package com.github.hobbe.android.openkarotz;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -55,6 +51,7 @@ import android.widget.Toast;
 
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 import com.github.hobbe.android.openkarotz.net.NetUtils;
+import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
 
 /**
  * Main activity.
@@ -139,6 +136,88 @@ public class MainActivity extends Activity {
         appTitle = drawerTitle = getTitle();
         pageTitles = getResources().getStringArray(R.array.pages);
 
+        initializeDrawer();
+
+        // Enabling Home button
+        getActionBar().setHomeButtonEnabled(true);
+
+        // Enabling Up navigation
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Disable all fields
+        disableFields();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        drawerToggle.syncState();
+
+        // Check network connection
+        if (NetUtils.isNetworkConnectionAvailable(this)) {
+
+            // Set up Karotz instance
+            initializeKarotz();
+
+            GetStatusTask task = new GetStatusTask(this);
+            task.execute();
+
+        } else {
+            Toast.makeText(MainActivity.this, getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Disable fields.
+     */
+    private void disableFields() {
+        drawerLayout.setEnabled(false);
+        drawerList.setEnabled(false);
+    }
+
+    private void doActionAbout() {
+        Toast.makeText(MainActivity.this, getString(R.string.version) + " " + getVersion(), Toast.LENGTH_LONG).show();
+    }
+
+    private void doActionSettings() {
+        Log.d(LOG_TAG, "Launching settings activity...");
+        Intent i = new Intent(this, SettingsActivity.class);
+        startActivityForResult(i, RESULT_SETTINGS);
+    }
+
+    /**
+     * Enable fields.
+     */
+    private void enableFields() {
+        drawerLayout.setEnabled(true);
+        drawerList.setEnabled(true);
+    }
+
+    private String getPrefKarotzHost() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String h = prefs.getString(SettingsActivity.KEY_PREF_KAROTZ_HOST, null);
+        if (h != null && h.length() <= 0) {
+            h = null;
+        }
+        return h;
+    }
+
+    private String getVersion() {
+        String versionName = "0.0";
+        try {
+            versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Cannot version.name from package manager: " + e.getMessage(), e);
+        }
+        return versionName;
+    }
+
+    /**
+     * Put everything in place to provide the drawer: drawer layout, drawer toggle and drawer list.
+     */
+    private void initializeDrawer() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         drawerList = (ListView) findViewById(R.id.drawer_list);
@@ -159,75 +238,19 @@ public class MainActivity extends Activity {
 
         // Setting item click listener for the drawer list view
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-        // Enabling Home button
-        getActionBar().setHomeButtonEnabled(true);
-
-        // Enabling Up navigation
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle.syncState();
-
-        // Check network connection
-        if (NetUtils.isNetworkConnectionAvailable(this)) {
-
-            // Set up Karotz instance
-            new GetStatusTask().execute();
-
-        } else {
-            Toast.makeText(MainActivity.this, getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void doActionAbout() {
-        Toast.makeText(MainActivity.this, getString(R.string.version) + " " + getVersion(), Toast.LENGTH_LONG).show();
-    }
-
-    private void doActionSettings() {
-        Log.d(TAG, "Launching settings activity...");
-        Intent i = new Intent(this, SettingsActivity.class);
-        startActivityForResult(i, RESULT_SETTINGS);
-    }
-
-    private String getPrefKarotzHost() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String h = prefs.getString(SettingsActivity.KEY_PREF_KAROTZ_HOST, null);
-        if (h != null && h.length() <= 0) {
-            h = null;
-        }
-        return h;
-    }
-
-    private String getVersion() {
-        String versionName = "0.0";
-        try {
-            versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        } catch (Exception e) {
-            // Ignored
-        }
-        return versionName;
     }
 
     private void initializeKarotz() {
-        Log.d(TAG, "Initializing Karotz...");
+        Log.d(LOG_TAG, "Initializing Karotz...");
         String hostname = getPrefKarotzHost();
         if (hostname == null) {
-            Log.d(TAG, "Preference Karotz Host not set");
+            Log.d(LOG_TAG, "Preference Karotz Host not set");
             doActionSettings();
         }
 
         Karotz.initialize(hostname);
     }
 
-    /**
-     * @param position
-     */
     private void selectDrawerItem(int position) {
 
         // Create a new fragment based on position
@@ -280,7 +303,7 @@ public class MainActivity extends Activity {
 
         /**
          * Create the drawer toggle.
-         * 
+         *
          * @param activity the associated activity
          * @param layout the drawer layout
          * @param imageRes the drawer image
@@ -312,55 +335,25 @@ public class MainActivity extends Activity {
         }
     }
 
-    private class GetStatusTask extends AsyncTask<Void, Void, KarotzStatus> {
+    private class GetStatusTask extends GetStatusAsyncTask {
 
-        @Override
-        protected KarotzStatus doInBackground(Void... params) {
-
-            // Set up Karotz instance
-            initializeKarotz();
-
-            try {
-                return Karotz.getInstance().getStatus();
-            } catch (IOException e) {
-                Log.e(TAG, "Cannot get Karotz status: " + e.getMessage());
-                return null;
-            }
+        public GetStatusTask(Activity activity) {
+            super(activity);
         }
 
         @Override
-        protected void onPostExecute(KarotzStatus result) {
-            pd.dismiss();
-            pd = null;
+        public void postExecute(Object result) {
+            KarotzStatus status = (KarotzStatus) result;
 
             // Check Karotz status
-            if (result != null) {
-                switch (result) {
-                case AWAKE:
-                    // Fall-through
-                case SLEEPING:
-                    break;
-                case UNKNOWN:
-                    // Fall-through
-                case OFFLINE:
-                    // Fall-through
-                default:
-                    Toast.makeText(MainActivity.this, getString(R.string.err_cannot_connect), Toast.LENGTH_LONG).show();
-                    break;
-                }
+            if (status != null && status.isOnline()) {
+                // Enable fields if Karotz is online
+                enableFields();
             } else {
-                Toast.makeText(MainActivity.this, getString(R.string.err_cannot_connect), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getActivity().getString(R.string.err_cannot_connect), Toast.LENGTH_LONG).show();
             }
         }
 
-        @Override
-        protected void onPreExecute() {
-            // TODO: I18N
-            pd = ProgressDialog.show(MainActivity.this, "Loading", "Please wait...");
-        }
-
-
-        private ProgressDialog pd = null;
     }
 
 
@@ -376,11 +369,13 @@ public class MainActivity extends Activity {
 
     private ActionBarDrawerToggle drawerToggle = null;
 
+    // Activity settings
     private static final int RESULT_SETTINGS = 1;
 
+    // Drawer pages
     private static final int PAGE_APPEARANCE = 0;
-
     private static final int PAGE_SYSTEM = 1;
 
-    private static final String TAG = "MainActivity";
+    // Log tag
+    private static final String LOG_TAG = MainActivity.class.getName();
 }

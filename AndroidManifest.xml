@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.hobbe.android.openkarotz"
     android:installLocation="auto"
-    android:versionCode="3"
+    android:versionCode="4"
     android:versionName="0.1" >
 
     <!-- Android 4.1.2 (API16) minimum -->

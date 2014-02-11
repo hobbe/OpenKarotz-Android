@@ -7,12 +7,16 @@
     <string name="title_activity_settings">Paramètres</string>
     <string name="action_about">A propos</string>
     <string name="action_settings">Paramètres</string>
+    <string name="progress_karotz_title">Discussion avec le Karotz</string>
+    <string name="progress_karotz_description">Veuillez patienter&#x2026;</string>
 
     <!-- Strings related to Main -->
 
     <string name="version">Version</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Ouvrir le panneau de navigation</string>
+    <string name="drawer_close">Fermer le panneau de navigation</string>
+    <string name="err_no_connection">La connection Internet n\'est pas active, veuillez la configurer sur l\'appareil</string>
+    <string name="err_cannot_connect">Communication avec le Karotz impossible, veuillez vérifier le nom d\'hôte dans les paramètres</string>
 
     <!-- Strings related to System fragment -->
 
@@ -21,6 +25,11 @@
     <string name="err_cannot_getversion">Impossible de récupérer la version du Karotz, vérifier les paramètres</string>
     <string name="err_cannot_wakeup">Impossible de réveiller le Karotz, vérifier les paramètres</string>
     <string name="err_cannot_sleep">Impossible d\'endormir le Karotz, vérifier les paramètres</string>
+
+    <!-- Strings related to Appearance fragment -->
+
+    <string name="pulse_label">Pulsation</string>
+    <string name="color_label">Couleur</string>
 
     <!-- Strings related to Settings -->
 
