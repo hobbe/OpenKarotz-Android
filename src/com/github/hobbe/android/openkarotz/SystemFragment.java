@@ -110,22 +110,7 @@ public class SystemFragment extends Fragment {
         @Override
         public void postExecute(Object result) {
             KarotzStatus status = (KarotzStatus) result;
-            if (status != null) {
-                switch (status) {
-                case AWAKE:
-                    onOffSwitch.setChecked(true);
-                    break;
-                case SLEEPING:
-                    // Fall-through
-                case UNKNOWN:
-                    // Fall-through
-                case OFFLINE:
-                    // Fall-through
-                default:
-                    onOffSwitch.setChecked(false);
-                    break;
-                }
-            }
+            onOffSwitch.setChecked(status != null && status.isAwake());
         }
     }
 

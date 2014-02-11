@@ -48,8 +48,10 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 import com.github.hobbe.android.openkarotz.task.GetColorAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetPulseAsyncTask;
+import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
 import com.github.hobbe.android.openkarotz.task.LedAsyncTask;
 
 /**
@@ -58,10 +60,17 @@ import com.github.hobbe.android.openkarotz.task.LedAsyncTask;
 public class AppearanceFragment extends Fragment {
 
     /**
-     * Initialize a new system fragment.
+     * Initialize a new appearance fragment.
      */
     public AppearanceFragment() {
         // Nothing to initialize
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        new GetStatusTask(getActivity()).execute();
     }
 
     @Override
@@ -79,17 +88,24 @@ public class AppearanceFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.page_appearance, container, false);
 
-        // Pulse status
-        initializePulseSwitch(view);
-
-        // Color button layout
-        initializeColorLayout(view);
+        initializeView(view);
 
         // Load default values
         new GetPulseTask(getActivity()).execute();
         new GetColorTask(getActivity()).execute();
 
         return view;
+    }
+
+    private void disableFields() {
+        pulseSwitch.setEnabled(false);
+        // TODO: layout is not disable
+        colorLayout.setEnabled(false);
+    }
+
+    private void enableFields() {
+        pulseSwitch.setEnabled(true);
+        colorLayout.setEnabled(true);
     }
 
     private void initializeColorLayout(View view) {
@@ -110,6 +126,14 @@ public class AppearanceFragment extends Fragment {
         pulseSwitch = (Switch) view.findViewById(R.id.switchPulse);
         pulseSwitchCheckedChangeListener = new PulseSwitchCheckedChangeListener();
         pulseSwitch.setOnCheckedChangeListener(pulseSwitchCheckedChangeListener);
+    }
+
+    private void initializeView(View view) {
+        // Pulse status
+        initializePulseSwitch(view);
+
+        // Color button layout
+        initializeColorLayout(view);
     }
 
 
@@ -206,6 +230,24 @@ public class AppearanceFragment extends Fragment {
                 pulseSwitch.setOnCheckedChangeListener(null);
                 pulseSwitch.setChecked(pulsing);
                 pulseSwitch.setOnCheckedChangeListener(pulseSwitchCheckedChangeListener);
+            }
+        }
+    }
+
+    private class GetStatusTask extends GetStatusAsyncTask {
+
+        public GetStatusTask(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void postExecute(Object result) {
+            KarotzStatus status = (KarotzStatus) result;
+            boolean awake = (status != null && status.isAwake());
+            if (awake) {
+                enableFields();
+            } else {
+                disableFields();
             }
         }
     }
