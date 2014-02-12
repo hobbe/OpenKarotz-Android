@@ -45,10 +45,10 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.layout.FlowLayout;
 import com.github.hobbe.android.openkarotz.task.GetColorAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetPulseAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
@@ -109,7 +109,7 @@ public class AppearanceFragment extends Fragment {
     }
 
     private void initializeColorLayout(View view) {
-        colorLayout = (LinearLayout) view.findViewById(R.id.layoutColors);
+        colorLayout = (FlowLayout) view.findViewById(R.id.layoutColors);
 
         for (String c : COLORS) {
             int color = Color.parseColor('#' + c);
@@ -286,8 +286,9 @@ public class AppearanceFragment extends Fragment {
     private Switch pulseSwitch = null;
     private PulseSwitchCheckedChangeListener pulseSwitchCheckedChangeListener = null;
 
-    private LinearLayout colorLayout = null;
+    private FlowLayout colorLayout = null;
 
+    // TODO: load colors from JSON file
     private static final String[] COLORS = {
             "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF", "FFFFFF", "000000"
     };

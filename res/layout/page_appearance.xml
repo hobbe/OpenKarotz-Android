@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:layout_alignLeft="@+id/textView"
     android:alignmentMode="alignBounds"
     android:columnCount="2"
@@ -12,51 +12,50 @@
     android:rowCount="2"
     android:useDefaultMargins="false" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:text="@string/pulse_label" />
-
-    <Switch
-        android:id="@+id/switchPulse"
-        android:layout_gravity="right"
-        android:padding="4dp"
-        android:textOff="@string/off_label"
-        android:textOn="@string/on_label" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_columnSpan="2"
         android:layout_gravity="top"
-        android:layout_row="1"
+        android:layout_margin="4dip"
+        android:layout_row="0"
         android:orientation="vertical" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:padding="4dip"
             android:text="@string/color_label" />
 
-        <HorizontalScrollView
-            android:id="@+id/hsvColor"
+        <com.github.hobbe.android.openkarotz.layout.FlowLayout
+            xmlns:f="http://schemas.android.com/apk/res/com.github.hobbe.android.openkarotz"
+            android:id="@+id/layoutColors"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fillViewport="true"
-            android:measureAllChildren="false"
-            android:scrollbars="none" >
-
-            <LinearLayout
-                android:id="@+id/layoutColors"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal" >
-
-            </LinearLayout>
-        </HorizontalScrollView>
+            f:horizontalSpacing="4dip"
+            f:verticalSpacing="4dip" >
+            <!-- Spacer for color buttons -->
+        </com.github.hobbe.android.openkarotz.layout.FlowLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_margin="4dip"
+        android:layout_row="1"
+        android:padding="4dip"
+        android:text="@string/pulse_label" />
+
+    <Switch
+        android:id="@+id/switchPulse"
+        android:layout_column="1"
+        android:layout_gravity="right"
+        android:layout_margin="4dip"
+        android:layout_row="1"
+        android:padding="4dip"
+        android:textOff="@string/off_label"
+        android:textOn="@string/on_label" />
 
 </GridLayout>
