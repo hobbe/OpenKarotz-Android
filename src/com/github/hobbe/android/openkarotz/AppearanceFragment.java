@@ -29,6 +29,11 @@
 package com.github.hobbe.android.openkarotz;
 
 import java.io.IOException;
+import java.io.InputStream;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -111,7 +116,7 @@ public class AppearanceFragment extends Fragment {
     private void initializeColorLayout(View view) {
         colorLayout = (FlowLayout) view.findViewById(R.id.layoutColors);
 
-        for (String c : COLORS) {
+        for (String c : loadColorsFromAsset()) {
             int color = Color.parseColor('#' + c);
 
             // Button
@@ -134,6 +139,62 @@ public class AppearanceFragment extends Fragment {
 
         // Color button layout
         initializeColorLayout(view);
+    }
+
+    private String[] loadColorsFromAsset() {
+
+        String content = loadJsonFromAsset("colors.json");
+        try {
+            JSONObject json = new JSONObject(content);
+            JSONArray list = json.getJSONArray("colors");
+
+            int count = list.length();
+            String[] colors = new String[count];
+
+            for (int i = 0; i < count; i++) {
+                JSONObject element = list.getJSONObject(i);
+                colors[i] = element.getString("code");
+            }
+
+            Log.i(LOG_TAG, "Using color set from asset colors.json");
+            return colors;
+
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
+        }
+
+        Log.i(LOG_TAG, "Using default color set");
+        // Return default colors
+        return COLORS;
+    }
+
+    private String loadJsonFromAsset(String filename) {
+        String json = null;
+
+        InputStream is = null;
+        try {
+            is = getActivity().getAssets().open(filename);
+
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+
+            json = new String(buffer, "UTF-8");
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Could not load JSON asset " + filename, e);
+            return null;
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    // Ignored
+                }
+            }
+        }
+
+        return json;
     }
 
 

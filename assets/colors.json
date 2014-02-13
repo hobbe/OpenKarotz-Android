@@ -1,0 +1,24 @@
+{
+	"colors": [
+		{ "code": "FFFFFF" },
+		{ "code": "FF0000" },
+		{ "code": "FF4000" },
+		{ "code": "FF8000" },
+		{ "code": "FFFF00" },
+		{ "code": "BFFF00" },
+		{ "code": "80FF00" },
+		{ "code": "00FF00" },
+		{ "code": "00FF40" },
+		{ "code": "00FF80" },
+		{ "code": "00FFFF" },
+		{ "code": "00BFFF" },
+		{ "code": "0080FF" },
+		{ "code": "0000FF" },
+		{ "code": "4000FF" },
+		{ "code": "8000FF" },
+		{ "code": "FF00FF" },
+		{ "code": "FF0080" },
+		{ "code": "FF0040" },
+		{ "code": "000000" }
+	]
+}
