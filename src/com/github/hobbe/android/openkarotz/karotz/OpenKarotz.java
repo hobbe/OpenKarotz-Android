@@ -130,7 +130,7 @@ public class OpenKarotz implements IKarotz {
                 return;
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot change LED on Kartoz: " + e.getMessage(), e);
+            Log.e(TAG, "Cannot change LED on Karotz: " + e.getMessage(), e);
         }
 
         // Not OK, set back to previous values
@@ -163,6 +163,36 @@ public class OpenKarotz implements IKarotz {
             return false;
         }
 
+    }
+
+    @Override
+    public boolean sound(String soundUrl) throws IOException {
+        if (soundUrl == null || soundUrl.length() <= 0) {
+            return true;
+        }
+
+        URL url = new URL(api, CGI_BIN + "/sound?url=" + soundUrl);
+        Log.d(TAG, url.toString());
+
+        String result = NetUtils.downloadUrl(url);
+        Log.d(TAG, result);
+
+        // Answer: {"return":"0"}
+        // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
+        try {
+            JSONObject json = new JSONObject(result);
+            boolean ok = "0".equals(json.getString("return"));
+
+            if (ok) {
+                Log.i(TAG, "Karotz is playing sound");
+                return true;
+            }
+            Log.e(TAG, "Karotz cannot play the sound");
+        } catch (JSONException e) {
+            Log.e(TAG, "Cannot make Karotz play a sound: " + e.getMessage(), e);
+        }
+
+        return false;
     }
 
     @Override
