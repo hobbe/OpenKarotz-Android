@@ -33,6 +33,10 @@
     <string name="pulse_label">Pulse</string>
     <string name="color_label">Color</string>
 
+    <!-- Strings related to Radio fragment -->
+
+    <string name="radio_button_desc">Radio</string>
+
     <!-- Strings related to Settings -->
 
     <string name="karotz_host_pref_title">OpenKarotz Host</string>

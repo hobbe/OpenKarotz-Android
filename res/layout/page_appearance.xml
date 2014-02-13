@@ -36,8 +36,8 @@
                 android:id="@+id/layoutColors"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                f:horizontalSpacing="4dip"
-                f:verticalSpacing="4dip" >
+                f:horizontalSpacing="4dp"
+                f:verticalSpacing="4dp" >
 
                 <!-- Spacer for color buttons -->
             </com.github.hobbe.android.openkarotz.layout.FlowLayout>

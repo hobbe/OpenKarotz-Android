@@ -230,8 +230,7 @@ public class MainActivity extends Activity {
         drawerLayout.setDrawerListener(drawerToggle);
 
         // Creating an ArrayAdapter to add items to the drawer list view
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.drawer_list_item,
-                getResources().getStringArray(R.array.pages));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.drawer_list_item, getResources().getStringArray(R.array.pages));
 
         // Setting the adapter on drawerList
         drawerList.setAdapter(adapter);
@@ -257,6 +256,10 @@ public class MainActivity extends Activity {
         Fragment fragment = null;
 
         switch (position) {
+        case PAGE_RADIO:
+            fragment = new RadioFragment();
+            break;
+
         case PAGE_APPEARANCE:
             fragment = new AppearanceFragment();
             break;
@@ -373,8 +376,9 @@ public class MainActivity extends Activity {
     private static final int RESULT_SETTINGS = 1;
 
     // Drawer pages
-    private static final int PAGE_APPEARANCE = 0;
-    private static final int PAGE_SYSTEM = 1;
+    private static final int PAGE_RADIO = 0;
+    private static final int PAGE_APPEARANCE = 1;
+    private static final int PAGE_SYSTEM = 2;
 
     // Log tag
     private static final String LOG_TAG = MainActivity.class.getName();

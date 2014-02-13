@@ -31,6 +31,10 @@
     <string name="pulse_label">Pulsation</string>
     <string name="color_label">Couleur</string>
 
+    <!-- Strings related to Radio fragment -->
+
+    <string name="radio_button_desc">Radio</string>
+
     <!-- Strings related to Settings -->
 
     <string name="karotz_host_pref_title">Adresse du Karotz</string>

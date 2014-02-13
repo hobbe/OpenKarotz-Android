@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="pages">
+        <item>Radio</item>
         <item>Apparence</item>
         <item>Système</item>
     </string-array>
