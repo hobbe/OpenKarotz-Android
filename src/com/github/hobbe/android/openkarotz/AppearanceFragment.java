@@ -30,6 +30,7 @@ package com.github.hobbe.android.openkarotz;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,26 +104,27 @@ public class AppearanceFragment extends Fragment {
     }
 
     private void disableFields() {
-        pulseSwitch.setEnabled(false);
-        // TODO: layout is not disable
-        colorLayout.setEnabled(false);
+        setEnableFields(false);
     }
 
     private void enableFields() {
-        pulseSwitch.setEnabled(true);
-        colorLayout.setEnabled(true);
+        setEnableFields(true);
     }
 
     private void initializeColorLayout(View view) {
         colorLayout = (FlowLayout) view.findViewById(R.id.layoutColors);
+
+        buttonMap = new HashMap<String, Button>();
 
         for (String c : loadColorsFromAsset()) {
             int color = Color.parseColor('#' + c);
 
             // Button
             Button btn = new ColorButton(getActivity(), color);
+            btn.setId(color);
             btn.setOnClickListener(new ColorButtonOnClickListener(color));
 
+            buttonMap.put(c, btn);
             colorLayout.addView(btn, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         }
     }
@@ -165,7 +167,7 @@ public class AppearanceFragment extends Fragment {
 
         Log.i(LOG_TAG, "Using default color set");
         // Return default colors
-        return COLORS;
+        return DEFAULT_COLORS;
     }
 
     private String loadJsonFromAsset(String filename) {
@@ -197,6 +199,28 @@ public class AppearanceFragment extends Fragment {
         return json;
     }
 
+    private void setEnableFields(boolean enable) {
+        pulseSwitch.setEnabled(enable);
+
+        for (Button button : buttonMap.values()) {
+            button.setEnabled(enable);
+        }
+    }
+
+    private static int darker(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.8f;
+        return Color.HSVToColor(hsv);
+    }
+
+    private static int lighter(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = 1.0f - 0.5f * (1.0f - hsv[2]);
+        return Color.HSVToColor(hsv);
+    }
+
 
     private class ColorButton extends Button {
 
@@ -208,7 +232,7 @@ public class AppearanceFragment extends Fragment {
 
             gdNormal = new GradientDrawable();
             gdNormal.setColors(new int[] {
-                    color, Color.WHITE
+                    darker(color), lighter(color)
             });
             gdNormal.setGradientType(GradientDrawable.LINEAR_GRADIENT);
             gdNormal.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
@@ -217,13 +241,23 @@ public class AppearanceFragment extends Fragment {
 
             gdTouch = new GradientDrawable();
             gdTouch.setColors(new int[] {
-                    color, Color.LTGRAY
+                    darker(color), lighter(color)
             });
             gdTouch.setGradientType(GradientDrawable.LINEAR_GRADIENT);
-            gdTouch.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
+            gdTouch.setOrientation(GradientDrawable.Orientation.TOP_BOTTOM);
             gdTouch.setCornerRadius(12);
-            gdTouch.setStroke(1, Color.DKGRAY);
+            gdTouch.setStroke(2, Color.GRAY);
 
+            gdDisable = new GradientDrawable();
+            gdDisable.setColors(new int[] {
+                    Color.LTGRAY, lighter(Color.LTGRAY)
+            });
+            gdDisable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+            gdDisable.setOrientation(GradientDrawable.Orientation.BOTTOM_TOP);
+            gdDisable.setCornerRadius(12);
+            gdDisable.setStroke(1, Color.GRAY);
+
+            // Be careful, if onTouchListener is changed, the effect is gone!
             setOnTouchListener(new OnTouchListener() {
 
                 @Override
@@ -241,9 +275,16 @@ public class AppearanceFragment extends Fragment {
             setBackground(gdNormal);
         }
 
+        @Override
+        public void setEnabled(boolean enabled) {
+            super.setEnabled(enabled);
+            setBackground(enabled ? gdNormal : gdDisable);
+        }
+
 
         private final GradientDrawable gdNormal;
         private final GradientDrawable gdTouch;
+        private final GradientDrawable gdDisable;
     }
 
     private class ColorButtonOnClickListener implements OnClickListener {
@@ -349,8 +390,9 @@ public class AppearanceFragment extends Fragment {
 
     private FlowLayout colorLayout = null;
 
-    // TODO: load colors from JSON file
-    private static final String[] COLORS = {
+    private HashMap<String, Button> buttonMap = null;
+
+    private static final String[] DEFAULT_COLORS = {
             "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF", "FFFFFF", "000000"
     };
 
