@@ -39,7 +39,7 @@ import com.github.hobbe.android.openkarotz.karotz.IKarotz.SoundControlCommand;
 /**
  * Task to make Karotz pause or stop a playing sound in the background.
  */
-public abstract class SoundControlAsyncTask extends KarotzAsyncTask {
+public class SoundControlAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.

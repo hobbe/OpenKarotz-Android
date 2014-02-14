@@ -53,9 +53,11 @@ import android.widget.Toast;
 
 import com.github.hobbe.android.openkarotz.adapter.DrawerListAdapter;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.SoundControlCommand;
 import com.github.hobbe.android.openkarotz.model.DrawerItem;
 import com.github.hobbe.android.openkarotz.net.NetUtils;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
+import com.github.hobbe.android.openkarotz.task.SoundControlAsyncTask;
 
 /**
  * Main activity.
@@ -89,6 +91,9 @@ public class MainActivity extends Activity {
 
         // Handle other action bar items...
         switch (item.getItemId()) {
+        case R.id.action_stop_sound:
+            doActionStopSound();
+            return true;
         case R.id.action_settings:
             doActionSettings();
             return true;
@@ -189,6 +194,10 @@ public class MainActivity extends Activity {
         Log.d(LOG_TAG, "Launching settings activity...");
         Intent i = new Intent(this, SettingsActivity.class);
         startActivityForResult(i, RESULT_SETTINGS);
+    }
+
+    private void doActionStopSound() {
+        new SoundControlAsyncTask(this, SoundControlCommand.STOP).execute();
     }
 
     /**
@@ -323,7 +332,7 @@ public class MainActivity extends Activity {
 
         /**
          * Create the drawer toggle.
-         *
+         * 
          * @param activity the associated activity
          * @param layout the drawer layout
          * @param imageRes the drawer image
