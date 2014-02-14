@@ -26,51 +26,63 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
-
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+package com.github.hobbe.android.openkarotz.model;
 
 /**
- * Drawer fragment. Fragment that appears in the "content_frame", shows the different view.
+ * This class represent an element of the navigation drawer.
  */
-public class DrawerFragment extends Fragment {
+public class DrawerItem {
 
     /**
-     * Initialize a new drawer fragment.
+     * Initialize an empty item.
      */
-    public DrawerFragment() {
-        // Nothing to do
+    public DrawerItem() {
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        // Fetch the selected page number
-        int index = getArguments().getInt(ARG_PAGE_NUMBER);
-
-        // List of pages
-        String[] pages = getResources().getStringArray(R.array.pages);
-
-        // Page title
-        String pageTitle = pages[index];
-
-        View rootView = inflater.inflate(R.layout.fragment_layout, container, false);
-
-        getActivity().setTitle(pageTitle);
-
-        return rootView;
-    }
-
 
     /**
-     * Page number argument.
+     * Initialize an item with title and icon.
+     * @param title the item's title
+     * @param icon the item's icon resource ID
      */
-    public static final String ARG_PAGE_NUMBER = "position";
+    public DrawerItem(String title, int icon) {
+        this.title = title;
+        this.icon = icon;
+    }
 
-    // private static final int PAGE_SYSTEM = 0;
+    /**
+     * Get the item icon.
+     * @return the item's icon resource ID
+     */
+    public int getIcon() {
+        return this.icon;
+    }
+
+    /**
+     * Get the item title.
+     * @return the item's title
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
+     * Set the item icon.
+     * @param icon the item's icon resource ID
+     */
+    public void setIcon(int icon) {
+        this.icon = icon;
+    }
+
+    /**
+     * Set the item title.
+     * @param title the item's title
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+    private int icon = 0;
+    private String title = null;
 
 }

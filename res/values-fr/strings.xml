@@ -15,6 +15,7 @@
     <string name="version">Version</string>
     <string name="drawer_open">Ouvrir le panneau de navigation</string>
     <string name="drawer_close">Fermer le panneau de navigation</string>
+    <string name="drawer_item_icon_desc">Icône</string>
     <string name="err_no_connection">La connection Internet n\'est pas active, veuillez la configurer sur l\'appareil</string>
     <string name="err_cannot_connect">Communication avec le Karotz impossible, veuillez vérifier le nom d\'hôte dans les paramètres</string>
 

@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/activatedBackgroundIndicator"
-    android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
-    android:textColor="#fff" />
+    android:layout_height="48dp"
+    android:background="@drawable/drawer_item_selector" >
+
+    <ImageView
+        android:id="@+id/drawer_item_icon"
+        android:layout_width="25dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:contentDescription="@string/drawer_item_icon_desc"
+        android:src="@drawable/ic_system" />
+
+    <TextView
+        android:id="@+id/drawer_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/drawer_item_icon"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:paddingRight="40dp"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textColor="@color/drawer_item_title" />
+
+</RelativeLayout>

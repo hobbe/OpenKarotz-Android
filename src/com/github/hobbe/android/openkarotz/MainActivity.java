@@ -28,12 +28,15 @@
 
 package com.github.hobbe.android.openkarotz;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -45,11 +48,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.github.hobbe.android.openkarotz.adapter.DrawerListAdapter;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.model.DrawerItem;
 import com.github.hobbe.android.openkarotz.net.NetUtils;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
 
@@ -173,7 +177,7 @@ public class MainActivity extends Activity {
      * Disable fields.
      */
     private void disableFields() {
-        drawerLayout.setEnabled(false);
+        // drawerLayout.setEnabled(false);
         drawerList.setEnabled(false);
     }
 
@@ -191,7 +195,7 @@ public class MainActivity extends Activity {
      * Enable fields.
      */
     private void enableFields() {
-        drawerLayout.setEnabled(true);
+        // drawerLayout.setEnabled(true);
         drawerList.setEnabled(true);
     }
 
@@ -219,18 +223,31 @@ public class MainActivity extends Activity {
      */
     private void initializeDrawer() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         drawerList = (ListView) findViewById(R.id.drawer_list);
-
-        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-
         drawerToggle = new DrawerToggle(this, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+
+        // Set the drawer shadow
+        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
         // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(drawerToggle);
 
-        // Creating an ArrayAdapter to add items to the drawer list view
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.drawer_list_item, getResources().getStringArray(R.array.pages));
+        // Load page icons from resources
+        TypedArray menuIcons = getResources().obtainTypedArray(R.array.pages_icons);
+
+        // Create a drawer item per page
+        ArrayList<DrawerItem> drawerItems = new ArrayList<DrawerItem>();
+        for (int i = 0; i < pageTitles.length; i++) {
+            drawerItems.add(new DrawerItem(pageTitles[i], menuIcons.getResourceId(i, -1)));
+        }
+
+        // Recycle the typed array
+        menuIcons.recycle();
+
+        // Creating the adapter to add items to the drawer list view
+        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.drawer_list_item,
+        // getResources().getStringArray(R.array.pages));
+        DrawerListAdapter adapter = new DrawerListAdapter(getApplicationContext(), drawerItems);
 
         // Setting the adapter on drawerList
         drawerList.setAdapter(adapter);
@@ -321,8 +338,8 @@ public class MainActivity extends Activity {
          * Called when a drawer has settled in a completely closed state.
          */
         @Override
-        public void onDrawerClosed(View view) {
-            super.onDrawerClosed(view);
+        public void onDrawerClosed(View drawer) {
+            super.onDrawerClosed(drawer);
             getActionBar().setTitle(appTitle);
             invalidateOptionsMenu();
         }
@@ -331,8 +348,8 @@ public class MainActivity extends Activity {
          * Called when a drawer has settled in a completely open state.
          */
         @Override
-        public void onDrawerOpened(View drawerView) {
-            super.onDrawerOpened(drawerView);
+        public void onDrawerOpened(View drawer) {
+            super.onDrawerOpened(drawer);
             getActionBar().setTitle(drawerTitle);
             invalidateOptionsMenu();
         }
@@ -361,15 +378,11 @@ public class MainActivity extends Activity {
 
 
     private CharSequence appTitle = null;
-
     private CharSequence drawerTitle = null;
-
     private String[] pageTitles = null;
 
     private DrawerLayout drawerLayout = null;
-
     private ListView drawerList = null;
-
     private ActionBarDrawerToggle drawerToggle = null;
 
     // Activity settings
