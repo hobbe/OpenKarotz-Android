@@ -34,21 +34,22 @@ import android.app.Activity;
 import android.util.Log;
 
 import com.github.hobbe.android.openkarotz.Karotz;
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.SoundControlCommand;
 
 /**
- * Task to make Karotz play a sound URL in the background.
+ * Task to make Karotz pause or stop a playing sound in the background.
  */
-public abstract class SoundAsyncTask extends KarotzAsyncTask {
+public abstract class SoundControlAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
      * 
      * @param activity the calling activity
-     * @param sound the sound URL to play
+     * @param cmd the sound URL to play
      */
-    public SoundAsyncTask(Activity activity, String sound) {
+    public SoundControlAsyncTask(Activity activity, SoundControlCommand cmd) {
         super(activity);
-        this.sound = sound;
+        this.cmd = cmd;
     }
 
     /**
@@ -58,16 +59,16 @@ public abstract class SoundAsyncTask extends KarotzAsyncTask {
     protected Boolean doInBackground(Object... params) {
 
         try {
-            return Boolean.valueOf(Karotz.getInstance().sound(sound));
+            return Boolean.valueOf(Karotz.getInstance().soundControl(cmd));
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Cannot make Karotz play a sound: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot call sound control on Karotz: " + e.getMessage(), e);
             return Boolean.FALSE;
         }
     }
 
 
-    private String sound = null;
+    private SoundControlCommand cmd = null;
 
     // Log tag
-    private static final String LOG_TAG = SoundAsyncTask.class.getName();
+    private static final String LOG_TAG = SoundControlAsyncTask.class.getName();
 }

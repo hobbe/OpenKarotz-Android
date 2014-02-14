@@ -47,7 +47,7 @@ public class OpenKarotz implements IKarotz {
 
     /**
      * Initialize a new OpenKarotz instance.
-     *
+     * 
      * @param hostname the hostname or IP
      */
     public OpenKarotz(String hostname) {
@@ -190,6 +190,27 @@ public class OpenKarotz implements IKarotz {
             Log.e(TAG, "Karotz cannot play the sound");
         } catch (JSONException e) {
             Log.e(TAG, "Cannot make Karotz play a sound: " + e.getMessage(), e);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean soundControl(SoundControlCommand command) throws IOException {
+        URL url = new URL(api, CGI_BIN + "/sound_control?cmd=" + command.toString());
+        Log.d(TAG, url.toString());
+
+        String result = NetUtils.downloadUrl(url);
+        Log.d(TAG, result);
+
+        // Answer: {"return":"0"}
+        // Answer: {"return":"1","msg":"No sound currently playing."}
+        // Answer: {"return":"1","msg":"Unable to perform action, rabbit is already sleeping."}
+        try {
+            JSONObject json = new JSONObject(result);
+            return ("0".equals(json.getString("return")));
+        } catch (JSONException e) {
+            Log.e(TAG, "Cannot call sound control on Karotz: " + e.getMessage(), e);
         }
 
         return false;
