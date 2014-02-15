@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_stop_sound"
-        android:icon="@android:drawable/ic_lock_silent_mode"
+        android:id="@+id/action_sound_stop"
+        android:icon="@drawable/ic_action_sound_stop"
         android:orderInCategory="80"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
         android:title="@string/action_stop_sound"/>
     <item
         android:id="@+id/action_settings"
         android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="90"
-        android:showAsAction="never"
+        android:showAsAction="ifRoom"
         android:title="@string/action_settings"/>
     <item
         android:id="@+id/action_about"

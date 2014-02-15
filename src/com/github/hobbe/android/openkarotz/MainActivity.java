@@ -91,7 +91,7 @@ public class MainActivity extends Activity {
 
         // Handle other action bar items...
         switch (item.getItemId()) {
-        case R.id.action_stop_sound:
+        case R.id.action_sound_stop:
             doActionStopSound();
             return true;
         case R.id.action_settings:
