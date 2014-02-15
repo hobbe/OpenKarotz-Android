@@ -26,13 +26,16 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
+package com.github.hobbe.android.openkarotz.fragment;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+
+import com.github.hobbe.android.openkarotz.R;
+import com.github.hobbe.android.openkarotz.activity.SettingsActivity;
 
 /**
  * Karotz settings fragment.

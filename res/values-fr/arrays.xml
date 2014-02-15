@@ -2,9 +2,11 @@
 <resources>
 
     <string-array name="pages">
+        <item>Accueil</item>
         <item>Radio</item>
-        <item>Apparence</item>
-        <item>Système</item>
+        <item>Couleur</item>
+        <item>Oreilles</item>
+        <item>Karotz</item>
     </string-array>
 
 </resources>

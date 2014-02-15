@@ -28,7 +28,7 @@
     <string name="err_cannot_wakeup">Impossible de réveiller le Karotz, vérifier les paramètres</string>
     <string name="err_cannot_sleep">Impossible d\'endormir le Karotz, vérifier les paramètres</string>
 
-    <!-- Strings related to Appearance fragment -->
+    <!-- Strings related to Color fragment -->
 
     <string name="pulse_label">Pulsation</string>
     <string name="color_label">Couleur</string>
@@ -36,6 +36,12 @@
     <!-- Strings related to Radio fragment -->
 
     <string name="radio_button_desc">Radio</string>
+
+    <!-- Strings related to Ears fragment -->
+
+    <string name="ears_reset_label">Position des oreilles</string>
+    <string name="ears_reset_text">Réinitialiser</string>
+    <string name="ears_disabled_label">Désactiver les oreilles</string>
 
     <!-- Strings related to Settings -->
 

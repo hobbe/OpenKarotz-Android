@@ -26,7 +26,7 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
+package com.github.hobbe.android.openkarotz.fragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,6 +49,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 
+import com.github.hobbe.android.openkarotz.R;
+import com.github.hobbe.android.openkarotz.activity.MainActivity;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 import com.github.hobbe.android.openkarotz.layout.FlowLayout;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
@@ -77,7 +79,7 @@ public class RadioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Fetch the selected page number
-        int index = getArguments().getInt(DrawerFragment.ARG_PAGE_NUMBER);
+        int index = getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
 
         // List of pages
         String[] pages = getResources().getStringArray(R.array.pages);
@@ -280,6 +282,7 @@ public class RadioFragment extends Fragment {
 
         /**
          * Get the identifier.
+         * 
          * @return the id
          */
         public String getId() {
@@ -288,6 +291,7 @@ public class RadioFragment extends Fragment {
 
         /**
          * Get the name.
+         * 
          * @return the name
          */
         public String getName() {
@@ -296,6 +300,7 @@ public class RadioFragment extends Fragment {
 
         /**
          * Get the URL.
+         * 
          * @return the url
          */
         public String getUrl() {

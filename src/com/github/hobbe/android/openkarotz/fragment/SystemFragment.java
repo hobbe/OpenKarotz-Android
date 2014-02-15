@@ -26,7 +26,7 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
+package com.github.hobbe.android.openkarotz.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -40,6 +40,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.hobbe.android.openkarotz.R;
+import com.github.hobbe.android.openkarotz.activity.MainActivity;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetVersionAsyncTask;
@@ -62,7 +64,7 @@ public class SystemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Fetch the selected page number
-        int index = getArguments().getInt(DrawerFragment.ARG_PAGE_NUMBER);
+        int index = getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
 
         // List of pages
         String[] pages = getResources().getStringArray(R.array.pages);
@@ -87,14 +89,14 @@ public class SystemFragment extends Fragment {
         onOffSwitch.setOnCheckedChangeListener(onOffSwitchCheckedChangeListener);
     }
 
-    private void initializeVersioNtextView(View view) {
+    private void initializeVersionTextView(View view) {
         versionTextView = (TextView) view.findViewById(R.id.textVersion);
         versionTextView.setText("-");
     }
 
     private void initializeView(View view) {
         // Version
-        initializeVersioNtextView(view);
+        initializeVersionTextView(view);
 
         // On/Off status
         initializeOnOffSwitch(view);

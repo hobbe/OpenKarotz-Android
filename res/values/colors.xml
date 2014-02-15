@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="drawer_bg">#111</color>
-    <color name="drawer_divider">#222</color>
-    <color name="drawer_item_bg">#111</color>
-    <color name="drawer_item_bg_pressed">#444</color>
-    <color name="drawer_item_title">#fff</color>
+    <color name="drawer_bg">#e111</color>
+    <color name="drawer_divider">#f222</color>
+    <color name="drawer_item_bg">#0000</color>
+    <color name="drawer_item_bg_pressed">#d000</color>
+    <color name="drawer_item_title">#eee</color>
 
 </resources>

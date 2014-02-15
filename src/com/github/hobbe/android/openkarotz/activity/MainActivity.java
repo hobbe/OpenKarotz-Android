@@ -26,7 +26,7 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
+package com.github.hobbe.android.openkarotz.activity;
 
 import java.util.ArrayList;
 
@@ -51,9 +51,16 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.github.hobbe.android.openkarotz.R;
 import com.github.hobbe.android.openkarotz.adapter.DrawerListAdapter;
+import com.github.hobbe.android.openkarotz.fragment.ColorFragment;
+import com.github.hobbe.android.openkarotz.fragment.EarsFragment;
+import com.github.hobbe.android.openkarotz.fragment.HomeFragment;
+import com.github.hobbe.android.openkarotz.fragment.RadioFragment;
+import com.github.hobbe.android.openkarotz.fragment.SystemFragment;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.SoundControlCommand;
+import com.github.hobbe.android.openkarotz.karotz.Karotz;
 import com.github.hobbe.android.openkarotz.model.DrawerItem;
 import com.github.hobbe.android.openkarotz.net.NetUtils;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
@@ -155,6 +162,11 @@ public class MainActivity extends Activity {
 
         // Disable all fields
         disableFields();
+
+        if (savedInstanceState == null) {
+            // Select first page (Home)
+            selectDrawerItem(0);
+        }
     }
 
     @Override
@@ -282,12 +294,20 @@ public class MainActivity extends Activity {
         Fragment fragment = null;
 
         switch (position) {
+        case PAGE_HOME:
+            fragment = new HomeFragment();
+            break;
+
         case PAGE_RADIO:
             fragment = new RadioFragment();
             break;
 
-        case PAGE_APPEARANCE:
-            fragment = new AppearanceFragment();
+        case PAGE_COLOR:
+            fragment = new ColorFragment();
+            break;
+
+        case PAGE_EARS:
+            fragment = new EarsFragment();
             break;
 
         case PAGE_SYSTEM:
@@ -295,12 +315,12 @@ public class MainActivity extends Activity {
             break;
 
         default:
-            fragment = new DrawerFragment();
+            fragment = new HomeFragment();
             break;
         }
 
         Bundle args = new Bundle();
-        args.putInt(DrawerFragment.ARG_PAGE_NUMBER, position);
+        args.putInt(ARG_PAGE_NUMBER, position);
         fragment.setArguments(args);
 
         // Insert the fragment by replacing any existing fragment
@@ -397,10 +417,17 @@ public class MainActivity extends Activity {
     // Activity settings
     private static final int RESULT_SETTINGS = 1;
 
+    /**
+     * Page number argument.
+     */
+    public static final String ARG_PAGE_NUMBER = "position";
+
     // Drawer pages
-    private static final int PAGE_RADIO = 0;
-    private static final int PAGE_APPEARANCE = 1;
-    private static final int PAGE_SYSTEM = 2;
+    private static final int PAGE_HOME = 0;
+    private static final int PAGE_RADIO = 1;
+    private static final int PAGE_COLOR = 2;
+    private static final int PAGE_EARS = 3;
+    private static final int PAGE_SYSTEM = 4;
 
     // Log tag
     private static final String LOG_TAG = MainActivity.class.getName();

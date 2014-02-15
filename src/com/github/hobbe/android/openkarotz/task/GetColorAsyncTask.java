@@ -33,7 +33,7 @@ import java.io.IOException;
 import android.app.Activity;
 import android.util.Log;
 
-import com.github.hobbe.android.openkarotz.Karotz;
+import com.github.hobbe.android.openkarotz.karotz.Karotz;
 
 /**
  * Task to get Karotz LED color in the background.

@@ -33,7 +33,7 @@ import java.io.IOException;
 import android.app.Activity;
 import android.util.Log;
 
-import com.github.hobbe.android.openkarotz.Karotz;
+import com.github.hobbe.android.openkarotz.karotz.Karotz;
 
 /**
  * Task to make Karotz play a sound URL in the background.

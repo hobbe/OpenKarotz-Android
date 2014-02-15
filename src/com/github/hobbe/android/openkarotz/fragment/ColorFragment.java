@@ -26,7 +26,7 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
+package com.github.hobbe.android.openkarotz.fragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,7 +53,10 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.github.hobbe.android.openkarotz.R;
+import com.github.hobbe.android.openkarotz.activity.MainActivity;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.karotz.Karotz;
 import com.github.hobbe.android.openkarotz.layout.FlowLayout;
 import com.github.hobbe.android.openkarotz.task.GetColorAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetPulseAsyncTask;
@@ -63,13 +66,27 @@ import com.github.hobbe.android.openkarotz.task.LedAsyncTask;
 /**
  * Appearance fragment.
  */
-public class AppearanceFragment extends Fragment {
+public class ColorFragment extends Fragment {
 
     /**
      * Initialize a new appearance fragment.
      */
-    public AppearanceFragment() {
+    public ColorFragment() {
         // Nothing to initialize
+    }
+
+    private static int darker(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.8f;
+        return Color.HSVToColor(hsv);
+    }
+
+    private static int lighter(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = 1.0f - 0.5f * (1.0f - hsv[2]);
+        return Color.HSVToColor(hsv);
     }
 
     @Override
@@ -83,7 +100,7 @@ public class AppearanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Fetch the selected page number
-        int index = getArguments().getInt(DrawerFragment.ARG_PAGE_NUMBER);
+        int index = getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
 
         // List of pages
         String[] pages = getResources().getStringArray(R.array.pages);
@@ -92,7 +109,7 @@ public class AppearanceFragment extends Fragment {
         String pageTitle = pages[index];
         getActivity().setTitle(pageTitle);
 
-        View view = inflater.inflate(R.layout.page_appearance, container, false);
+        View view = inflater.inflate(R.layout.page_color, container, false);
 
         initializeView(view);
 
@@ -205,20 +222,6 @@ public class AppearanceFragment extends Fragment {
         for (Button button : buttonMap.values()) {
             button.setEnabled(enable);
         }
-    }
-
-    private static int darker(final int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.8f;
-        return Color.HSVToColor(hsv);
-    }
-
-    private static int lighter(final int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = 1.0f - 0.5f * (1.0f - hsv[2]);
-        return Color.HSVToColor(hsv);
     }
 
 
@@ -396,6 +399,6 @@ public class AppearanceFragment extends Fragment {
             "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF", "FFFFFF", "000000"
     };
 
-    private static final String LOG_TAG = AppearanceFragment.class.getName();
+    private static final String LOG_TAG = ColorFragment.class.getName();
 
 }

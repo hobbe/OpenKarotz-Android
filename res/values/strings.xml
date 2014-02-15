@@ -30,7 +30,7 @@
     <string name="err_cannot_wakeup">Cannot wake Karotz up, check host name</string>
     <string name="err_cannot_sleep">Cannot put Karotz to sleep, check host name</string>
 
-    <!-- Strings related to Appearance fragment -->
+    <!-- Strings related to Color fragment -->
 
     <string name="pulse_label">Pulse</string>
     <string name="color_label">Color</string>
@@ -38,6 +38,12 @@
     <!-- Strings related to Radio fragment -->
 
     <string name="radio_button_desc">Radio</string>
+
+    <!-- Strings related to Ears fragment -->
+
+    <string name="ears_reset_label">Ear position</string>
+    <string name="ears_reset_text">Reset</string>
+    <string name="ears_disabled_label">Disable ears</string>
 
     <!-- Strings related to Settings -->
 

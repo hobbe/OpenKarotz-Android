@@ -26,41 +26,29 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
+package com.github.hobbe.android.openkarotz.activity;
 
-import com.github.hobbe.android.openkarotz.karotz.IKarotz;
-import com.github.hobbe.android.openkarotz.karotz.OpenKarotz;
+import android.app.Activity;
+import android.os.Bundle;
+
+import com.github.hobbe.android.openkarotz.fragment.KarotzSettingsFragment;
 
 /**
- * Karotz instance.
+ * Settings activity.
  */
-public class Karotz {
+public class SettingsActivity extends Activity {
 
-    private Karotz() {
-        // No instance
-    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    /**
-     * Get the Karotz instance.
-     * 
-     * @return the Karotz instance.
-     */
-    public static IKarotz getInstance() {
-        if (k == null) {
-            throw new IllegalAccessError();
-        }
-        return k;
-    }
+        // Display the fragment as the main content.
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new KarotzSettingsFragment()).commit();
 
-    /**
-     * Initialize the Karotz application singleton.
-     * 
-     * @param hostname the Karotz hostname.
-     */
-    public static void initialize(String hostname) {
-        k = new OpenKarotz(hostname);
     }
 
 
-    private static IKarotz k = null;
+    /** Key for Karotz hostname preference. */
+    public static final String KEY_PREF_KAROTZ_HOST = "prefKarotzHost";
+
 }

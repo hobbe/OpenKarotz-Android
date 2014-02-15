@@ -26,7 +26,7 @@
  *
  */
 
-package com.github.hobbe.android.openkarotz;
+package com.github.hobbe.android.openkarotz.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -34,15 +34,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.hobbe.android.openkarotz.R;
+import com.github.hobbe.android.openkarotz.activity.MainActivity;
+
 /**
- * Drawer fragment. Fragment that appears in the "content_frame", shows the different view.
+ * Home fragment.
  */
-public class DrawerFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
     /**
-     * Initialize a new drawer fragment.
+     * Initialize a new home fragment.
      */
-    public DrawerFragment() {
+    public HomeFragment() {
         // Nothing to do
     }
 
@@ -50,27 +53,16 @@ public class DrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Fetch the selected page number
-        int index = getArguments().getInt(ARG_PAGE_NUMBER);
+        int index = getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
 
         // List of pages
         String[] pages = getResources().getStringArray(R.array.pages);
 
         // Page title
         String pageTitle = pages[index];
-
-        View rootView = inflater.inflate(R.layout.fragment_layout, container, false);
-
         getActivity().setTitle(pageTitle);
 
-        return rootView;
+        return inflater.inflate(R.layout.page_home, container, false);
     }
-
-
-    /**
-     * Page number argument.
-     */
-    public static final String ARG_PAGE_NUMBER = "position";
-
-    // private static final int PAGE_SYSTEM = 0;
 
 }

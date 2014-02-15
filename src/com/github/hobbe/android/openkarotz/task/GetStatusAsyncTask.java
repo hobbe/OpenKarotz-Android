@@ -33,8 +33,8 @@ import java.io.IOException;
 import android.app.Activity;
 import android.util.Log;
 
-import com.github.hobbe.android.openkarotz.Karotz;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.karotz.Karotz;
 
 /**
  * Task to get Karotz status in the background.
@@ -43,6 +43,7 @@ public abstract class GetStatusAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public GetStatusAsyncTask(Activity activity) {
