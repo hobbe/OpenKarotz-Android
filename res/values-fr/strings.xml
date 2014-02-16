@@ -36,6 +36,7 @@
     <!-- Strings related to Radio fragment -->
 
     <string name="radio_button_desc">Radio</string>
+    <string name="radio_starting">Lancement de la radio :</string>
 
     <!-- Strings related to Ears fragment -->
 

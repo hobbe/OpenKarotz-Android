@@ -48,6 +48,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.github.hobbe.android.openkarotz.R;
 import com.github.hobbe.android.openkarotz.activity.MainActivity;
@@ -122,7 +123,7 @@ public class RadioFragment extends Fragment {
                 btn.setImageResource(android.R.drawable.ic_btn_speak_now);
             }
 
-            btn.setOnClickListener(new RadioButtonOnClickListener(radio.getUrl()));
+            btn.setOnClickListener(new RadioButtonOnClickListener(radio.getUrl(), radio.getName()));
 
             buttonMap.put(radio.id, btn);
             radioLayout.addView(btn, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -251,25 +252,36 @@ public class RadioFragment extends Fragment {
 
     private class PlayRadioTask extends SoundAsyncTask {
 
-        public PlayRadioTask(Activity activity, String url) {
+        public PlayRadioTask(Activity activity, String url, String name) {
             super(activity, url);
+            this.name = name;
         }
+
+        @Override
+        public void postExecute(Object result) {
+            Toast.makeText(getActivity(), getString(R.string.radio_starting) + " " + name, Toast.LENGTH_SHORT).show();
+        }
+
+
+        private final String name;
     }
 
     private class RadioButtonOnClickListener implements OnClickListener {
 
-        public RadioButtonOnClickListener(String url) {
+        public RadioButtonOnClickListener(String url, String name) {
             this.url = url;
+            this.name = name;
         }
 
         @Override
         public void onClick(View btn) {
             Log.d(LOG_TAG, "Radio button clicked: " + url);
-            new PlayRadioTask(getActivity(), url).execute();
+            new PlayRadioTask(getActivity(), url, name).execute();
         }
 
 
         private final String url;
+        private final String name;
     }
 
     private class RadioModel {
