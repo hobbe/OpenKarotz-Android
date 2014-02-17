@@ -47,7 +47,7 @@ public class OpenKarotz implements IKarotz {
 
     /**
      * Initialize a new OpenKarotz instance.
-     * 
+     *
      * @param hostname the hostname or IP
      */
     public OpenKarotz(String hostname) {
@@ -58,6 +58,52 @@ public class OpenKarotz implements IKarotz {
             this.api = new URL(PROTOCOL + "://" + hostname + ":" + PORT);
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void earsRandom() throws IOException {
+        URL url = new URL(api, CGI_BIN + "/ears_random");
+        Log.d(TAG, url.toString());
+
+        String result = NetUtils.downloadUrl(url);
+        Log.d(TAG, result);
+
+        // Answer: {"left":"0","right":"0","return":"0"}
+        // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
+        // Answer: {"return":"1","msg":"Unable to perform action, ears disabled."}
+        try {
+            JSONObject json = new JSONObject(result);
+            boolean ok = "0".equals(json.getString("return"));
+
+            if (ok) {
+                return;
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Cannot reset Karotz ears: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void earsReset() throws IOException {
+        URL url = new URL(api, CGI_BIN + "/ears_reset");
+        Log.d(TAG, url.toString());
+
+        String result = NetUtils.downloadUrl(url);
+        Log.d(TAG, result);
+
+        // Answer: {"return":"0"}
+        // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
+        // Answer: {"return":"1","msg":"Unable to perform action, ears disabled."}
+        try {
+            JSONObject json = new JSONObject(result);
+            boolean ok = "0".equals(json.getString("return"));
+
+            if (ok) {
+                return;
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Cannot reset Karotz ears: " + e.getMessage(), e);
         }
     }
 

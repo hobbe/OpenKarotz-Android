@@ -12,7 +12,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:rowCount="3"
+        android:rowCount="4"
         android:useDefaultMargins="false" >
 
         <LinearLayout
@@ -24,7 +24,6 @@
             android:layout_margin="4dip"
             android:layout_row="0"
             android:orientation="vertical" >
-
         </LinearLayout>
 
         <TextView
@@ -36,14 +35,13 @@
             android:padding="4dip"
             android:text="@string/ears_reset_label" />
 
-        <Button
+        <ImageButton
             android:id="@+id/buttonEarsReset"
             android:layout_column="1"
-            android:layout_gravity="right"
-            android:layout_margin="4dip"
+            android:layout_gravity="right|center_vertical"
             android:layout_row="1"
-            android:padding="4dip"
-            android:text="@string/ears_reset_text" />
+            android:contentDescription="@string/ears_reset_desc"
+            android:src="@drawable/ic_button_reset" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,14 +50,31 @@
             android:layout_margin="4dip"
             android:layout_row="2"
             android:padding="4dip"
+            android:text="@string/ears_random_label" />
+
+        <ImageButton
+            android:id="@+id/buttonEarsRandom"
+            android:layout_column="1"
+            android:layout_gravity="right|center_vertical"
+            android:layout_row="2"
+            android:contentDescription="@string/ears_random_desc"
+            android:src="@drawable/ic_button_random" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_margin="4dip"
+            android:layout_row="3"
+            android:padding="4dip"
             android:text="@string/ears_disabled_label" />
 
         <Switch
             android:id="@+id/switchEarsDisabled"
             android:layout_column="1"
-            android:layout_gravity="right"
+            android:layout_gravity="right|center_vertical"
             android:layout_margin="4dip"
-            android:layout_row="2"
+            android:layout_row="3"
             android:padding="4dip"
             android:textOff="@string/off_label"
             android:textOn="@string/on_label" />

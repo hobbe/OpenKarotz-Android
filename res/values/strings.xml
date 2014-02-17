@@ -42,9 +42,11 @@
 
     <!-- Strings related to Ears fragment -->
 
-    <string name="ears_reset_label">Ear position</string>
-    <string name="ears_reset_text">Reset</string>
-    <string name="ears_disabled_label">Disable ears</string>
+    <string name="ears_reset_label">Reset Position</string>
+    <string name="ears_reset_desc">Reset</string>
+    <string name="ears_random_label">Random Position</string>
+    <string name="ears_random_desc">Random</string>
+    <string name="ears_disabled_label">Disable Ears</string>
 
     <!-- Strings related to Settings -->
 

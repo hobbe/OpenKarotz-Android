@@ -34,14 +34,17 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.Switch;
 
 import com.github.hobbe.android.openkarotz.R;
 import com.github.hobbe.android.openkarotz.activity.MainActivity;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.task.EarsRandomAsyncTask;
+import com.github.hobbe.android.openkarotz.task.EarsResetAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
 
 /**
@@ -97,20 +100,45 @@ public class EarsFragment extends Fragment {
         earsDisabledSwitch.setOnCheckedChangeListener(earsDisabledSwitchCheckedChangeListener);
     }
 
+    private void initializeEarsRandom(View view) {
+        earsRandomButton = (ImageButton) view.findViewById(R.id.buttonEarsRandom);
+
+        earsRandomButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new EarsRandomAsyncTask(getActivity()).execute();
+            }
+        });
+    }
+
     private void initializeEarsReset(View view) {
-        earsResetButton = (Button) view.findViewById(R.id.buttonEarsReset);
+        earsResetButton = (ImageButton) view.findViewById(R.id.buttonEarsReset);
+
+        earsResetButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new EarsResetAsyncTask(getActivity()).execute();
+            }
+        });
     }
 
     private void initializeView(View view) {
         // Ears reset
         initializeEarsReset(view);
 
+        // Ears random
+        initializeEarsRandom(view);
+
         // Ears disabled
         initializeEarsDisabled(view);
     }
 
     private void setEnableFields(boolean enable) {
-        // TODO
+        earsResetButton.setEnabled(enable);
+        earsRandomButton.setEnabled(enable);
+        earsDisabledSwitch.setEnabled(enable);
     }
 
 
@@ -147,7 +175,8 @@ public class EarsFragment extends Fragment {
     }
 
 
-    private Button earsResetButton = null;
+    private ImageButton earsResetButton = null;
+    private ImageButton earsRandomButton = null;
     private Switch earsDisabledSwitch = null;
     private EarsDisabledSwitchCheckedChangeListener earsDisabledSwitchCheckedChangeListener = null;
 
