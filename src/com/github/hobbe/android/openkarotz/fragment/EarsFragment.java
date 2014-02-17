@@ -42,9 +42,12 @@ import android.widget.Switch;
 
 import com.github.hobbe.android.openkarotz.R;
 import com.github.hobbe.android.openkarotz.activity.MainActivity;
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarMode;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
+import com.github.hobbe.android.openkarotz.task.EarModeAsyncTask;
 import com.github.hobbe.android.openkarotz.task.EarsRandomAsyncTask;
 import com.github.hobbe.android.openkarotz.task.EarsResetAsyncTask;
+import com.github.hobbe.android.openkarotz.task.GetEarModeAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
 
 /**
@@ -64,6 +67,7 @@ public class EarsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         new GetStatusTask(getActivity()).execute();
+        new GetEarModeTask(getActivity()).execute();
     }
 
     @Override
@@ -138,9 +142,28 @@ public class EarsFragment extends Fragment {
     private void setEnableFields(boolean enable) {
         earsResetButton.setEnabled(enable);
         earsRandomButton.setEnabled(enable);
-        earsDisabledSwitch.setEnabled(enable);
+        // earsDisabledSwitch.setEnabled(enable);
     }
 
+
+    private class EarModeTask extends EarModeAsyncTask {
+
+        public EarModeTask(Activity activity, EarMode mode) {
+            super(activity, mode);
+        }
+
+        @Override
+        public void postExecute(Object result) {
+            EarMode newMode = (EarMode) result;
+            if (newMode != null) {
+                // Check switch, without triggering listener
+                earsDisabledSwitch.setOnCheckedChangeListener(null);
+                earsDisabledSwitch.setChecked(newMode.isDisabled());
+                setEnableFields(newMode.isEnabled());
+                earsDisabledSwitch.setOnCheckedChangeListener(earsDisabledSwitchCheckedChangeListener);
+            }
+        }
+    }
 
     private class EarsDisabledSwitchCheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
 
@@ -151,8 +174,22 @@ public class EarsFragment extends Fragment {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             Log.d(LOG_TAG, "Ears disabled switch " + (isChecked ? "" : "un") + "checked");
+            new EarModeTask(getActivity(), isChecked ? EarMode.DISABLED : EarMode.ENABLED).execute();
+        }
+    }
 
-            // new DisableEarsTask(getActivity(), isChecked).execute();
+    private class GetEarModeTask extends GetEarModeAsyncTask {
+
+        public GetEarModeTask(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void postExecute(Object result) {
+            EarMode earMode = (EarMode) result;
+            if (earMode != null) {
+                earsDisabledSwitch.setChecked(earMode.isDisabled());
+            }
         }
     }
 

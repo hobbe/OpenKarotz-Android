@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import android.graphics.Color;
 import android.util.Log;
 
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarMode;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 
 /**
@@ -63,9 +64,10 @@ public class OpenKarotzState {
                 status = ("1".equals(jo.getString(KEY_SLEEP)) ? KarotzStatus.SLEEPING : KarotzStatus.AWAKE);
                 ledColor = Color.parseColor("#" + jo.getString(KEY_LED_COLOR));
                 pulsing = ("1".equals(jo.getString(KEY_LED_PULSE)));
+                earMode = ("1".equals(jo.getString(KEY_EARS_DISABLED)) ? EarMode.DISABLED : EarMode.ENABLED);
             } catch (JSONException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Cannot parse status answer: " + json);
+                Log.e(LOG_TAG, "Cannot parse status answer: " + json);
                 status = KarotzStatus.UNKNOWN;
             }
 
@@ -75,9 +77,18 @@ public class OpenKarotzState {
     }
 
     /**
+     * Get the ear mode.
+     * 
+     * @return the ear mode
+     */
+    public EarMode getEarMode() {
+        return earMode;
+    }
+
+    /**
      * Get the LED color.
      * 
-     * @return the ledColor
+     * @return the LED color
      */
     public int getLedColor() {
         return ledColor & 0x00FFFFFF;
@@ -108,6 +119,15 @@ public class OpenKarotzState {
      */
     public boolean isPulsing() {
         return pulsing;
+    }
+
+    /**
+     * Set the ear mode.
+     * 
+     * @param the ear mode
+     */
+    public void setEarMode(EarMode mode) {
+        this.earMode = mode;
     }
 
     /**
@@ -148,6 +168,8 @@ public class OpenKarotzState {
         sb.append(Integer.toHexString(ledColor));
         sb.append("\", \"pulse\": \"");
         sb.append(pulsing ? "1" : "0");
+        sb.append("\", \"ears_disabled\": \"");
+        sb.append(earMode.isDisabled() ? "1" : "0");
         sb.append("\" }");
         return sb.toString();
     }
@@ -161,6 +183,8 @@ public class OpenKarotzState {
 
     private boolean pulsing = true;
 
+    private EarMode earMode = EarMode.ENABLED;
+
     private static final String KEY_VERSION = "version";
 
     private static final String KEY_SLEEP = "sleep";
@@ -169,5 +193,7 @@ public class OpenKarotzState {
 
     private static final String KEY_LED_PULSE = "led_pulse";
 
-    private static final String TAG = "OpenKarotzState";
+    private static final String KEY_EARS_DISABLED = "ears_disabled";
+
+    private static final String LOG_TAG = OpenKarotzState.class.getName();
 }

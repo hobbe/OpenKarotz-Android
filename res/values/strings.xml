@@ -24,8 +24,8 @@
 
     <string name="version_label">OpenKarotz Version</string>
     <string name="onoff_label">Karotz Status</string>
-    <string name="on_label" translatable="false">ON</string>
-    <string name="off_label" translatable="false">OFF</string>
+    <string name="on_label">ON</string>
+    <string name="off_label">OFF</string>
     <string name="err_cannot_getversion">Cannot get Karotz version, check host name</string>
     <string name="err_cannot_wakeup">Cannot wake Karotz up, check host name</string>
     <string name="err_cannot_sleep">Cannot put Karotz to sleep, check host name</string>

@@ -33,38 +33,38 @@ import java.io.IOException;
 import android.app.Activity;
 import android.util.Log;
 
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarMode;
 import com.github.hobbe.android.openkarotz.karotz.Karotz;
 
 /**
- * Task to change Karotz ears randomly in the background.
+ * Task to get Karotz ear mode in the background.
  */
-public class EarsRandomAsyncTask extends KarotzAsyncTask {
+public abstract class GetEarModeAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
      * 
      * @param activity the calling activity
      */
-    public EarsRandomAsyncTask(Activity activity) {
+    public GetEarModeAsyncTask(Activity activity) {
         super(activity);
     }
 
     /**
-     * This tasks does not return anything ({@code null}).
+     * This tasks returns a {@link EarMode ear mode}.
      */
     @Override
-    protected Void doInBackground(Object... params) {
+    protected EarMode doInBackground(Object... params) {
 
         try {
-            Karotz.getInstance().earsRandom();
-            return null;
+            return Karotz.getInstance().getEarMode();
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Cannot change Karotz LED color: " + e.getMessage(), e);
-            return null;
+            Log.e(LOG_TAG, "Cannot get Karotz ear mode: " + e.getMessage(), e);
+            return EarMode.ENABLED;
         }
     }
 
 
     // Log tag
-    private static final String LOG_TAG = EarsRandomAsyncTask.class.getName();
+    private static final String LOG_TAG = GetEarModeAsyncTask.class.getName();
 }

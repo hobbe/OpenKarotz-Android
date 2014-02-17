@@ -36,12 +36,13 @@ import android.util.Log;
 import com.github.hobbe.android.openkarotz.karotz.Karotz;
 
 /**
- * Task to change Karotz LED color and pulse in the background.
+ * Task to reset Karotz ears in the background.
  */
 public class EarsResetAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public EarsResetAsyncTask(Activity activity) {

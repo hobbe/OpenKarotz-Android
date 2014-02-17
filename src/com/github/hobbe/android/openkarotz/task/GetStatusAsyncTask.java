@@ -39,7 +39,7 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to get Karotz status in the background.
  */
-public abstract class GetStatusAsyncTask extends KarotzAsyncTask {
+public class GetStatusAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.

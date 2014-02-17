@@ -24,6 +24,8 @@
 
     <string name="version_label">Version OpenKarotz</string>
     <string name="onoff_label">État du Karotz</string>
+    <string name="on_label">ON</string>
+    <string name="off_label">OFF</string>
     <string name="err_cannot_getversion">Impossible de récupérer la version du Karotz, vérifier les paramètres</string>
     <string name="err_cannot_wakeup">Impossible de réveiller le Karotz, vérifier les paramètres</string>
     <string name="err_cannot_sleep">Impossible d\'endormir le Karotz, vérifier les paramètres</string>
@@ -40,8 +42,10 @@
 
     <!-- Strings related to Ears fragment -->
 
-    <string name="ears_reset_label">Position des oreilles</string>
+    <string name="ears_reset_label">Réinitialiser la position</string>
     <string name="ears_reset_text">Réinitialiser</string>
+    <string name="ears_random_label">Position aléatoire</string>
+    <string name="ears_random_desc">Aléatoire</string>
     <string name="ears_disabled_label">Désactiver les oreilles</string>
 
     <!-- Strings related to Settings -->

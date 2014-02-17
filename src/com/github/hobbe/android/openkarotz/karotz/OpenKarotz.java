@@ -47,7 +47,7 @@ public class OpenKarotz implements IKarotz {
 
     /**
      * Initialize a new OpenKarotz instance.
-     *
+     * 
      * @param hostname the hostname or IP
      */
     public OpenKarotz(String hostname) {
@@ -59,6 +59,38 @@ public class OpenKarotz implements IKarotz {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public EarMode earsMode(EarMode mode) throws IOException {
+        EarMode currentMode = getEarMode();
+        if (currentMode == mode) {
+            // No change
+            Log.d(TAG, "No change in ear mode");
+            return mode;
+        }
+
+        URL url = new URL(api, CGI_BIN + "/ears_mode?disable=" + (mode.isEnabled() ? "0" : "1"));
+        Log.d(TAG, url.toString());
+
+        String result = NetUtils.downloadUrl(url);
+        Log.d(TAG, result);
+
+        // Answer: {"return":"0","disabled":"0"}
+        try {
+            JSONObject json = new JSONObject(result);
+            boolean ok = "0".equals(json.getString("return"));
+
+            if (ok) {
+                EarMode newMode = "0".equals(json.getString("disabled")) ? EarMode.ENABLED : EarMode.DISABLED;
+                state.setEarMode(newMode);
+                return newMode;
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Cannot en/disable Karotz ears: " + e.getMessage(), e);
+        }
+
+        return currentMode;
     }
 
     @Override
@@ -80,7 +112,7 @@ public class OpenKarotz implements IKarotz {
                 return;
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot reset Karotz ears: " + e.getMessage(), e);
+            Log.e(TAG, "Cannot put Karotz ears in random position: " + e.getMessage(), e);
         }
     }
 
@@ -113,6 +145,15 @@ public class OpenKarotz implements IKarotz {
             status();
         }
         return state.getLedColor();
+    }
+
+    @Override
+    public EarMode getEarMode() throws IOException {
+        if (isOffline()) {
+            // Re-check state
+            status();
+        }
+        return state.getEarMode();
     }
 
     @Override
@@ -331,6 +372,6 @@ public class OpenKarotz implements IKarotz {
 
     private static final int PORT = 80;
 
-    private static final String TAG = "OpenKarotz";
+    private static final String TAG = OpenKarotz.class.getName();
 
 }

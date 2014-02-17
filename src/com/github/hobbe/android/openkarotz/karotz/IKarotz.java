@@ -36,37 +36,54 @@ import java.io.IOException;
 public interface IKarotz {
 
     /**
+     * Change the Karotz ear mode. If {@link EarMode#DISABLED disabled}, the Karotz ears will no longer move.
+     * 
+     * @param mode the ear mode to set
+     * @return the resulting ear mode
+     * @throws IOException if an I/O error occurs
+     */
+    EarMode earsMode(EarMode mode) throws IOException;
+
+    /**
      * Turn ears in a random position.
-     *
+     * 
      * @throws IOException if an I/O error occurs
      */
     void earsRandom() throws IOException;
 
     /**
      * Reset ear position.
-     *
+     * 
      * @throws IOException if an I/O error occurs
      */
     void earsReset() throws IOException;
 
     /**
      * Get the Karotz LED color.
-     *
+     * 
      * @return the LED color
      * @throws IOException if an I/O error occurs
      */
     int getColor() throws IOException;
 
     /**
+     * Get the Karotz ear mode.
+     * 
+     * @return the ear mode
+     * @throws IOException if an I/O error occurs
+     */
+    EarMode getEarMode() throws IOException;
+
+    /**
      * Get the Karotz hostname.
-     *
+     * 
      * @return the hostname
      */
     String getHostname();
 
     /**
      * Get the Karotz status.
-     *
+     * 
      * @return the status
      * @throws IOException if an I/O error occurs
      */
@@ -74,7 +91,7 @@ public interface IKarotz {
 
     /**
      * Get the Karotz version.
-     *
+     * 
      * @return the version
      * @throws IOException if an I/O error occurs
      */
@@ -82,7 +99,7 @@ public interface IKarotz {
 
     /**
      * Check if Karotz LED is pulsing.
-     *
+     * 
      * @return the
      * @throws IOException if an I/O error occurs
      */
@@ -90,7 +107,7 @@ public interface IKarotz {
 
     /**
      * Change LED color and pulse.
-     *
+     * 
      * @param color the LED color
      * @param pulse if {@code true}, LED will pulse
      * @throws IOException if an I/O error occurs
@@ -99,7 +116,7 @@ public interface IKarotz {
 
     /**
      * Put Karotz to sleep.
-     *
+     * 
      * @return {@code true} if action was successful, else {@code false}. If Karotz was already sleeping, {@code true}
      *         is returned.
      * @throws IOException if an I/O error occurs
@@ -108,7 +125,7 @@ public interface IKarotz {
 
     /**
      * Make Karotz play a sound from a URL.
-     *
+     * 
      * @param url the sound URL to play
      * @return {@code true} if action was successful, else {@code false}. If {@code url} is {@code null}, {@code true}
      *         is returned.
@@ -118,6 +135,7 @@ public interface IKarotz {
 
     /**
      * Call sound control with the given command.
+     * 
      * @param command the sound control command
      * @return {@code true} if action was successful, else {@code false}.
      * @throws IOException if an I/O error occurs
@@ -126,13 +144,43 @@ public interface IKarotz {
 
     /**
      * Wake up Karotz.
-     *
+     * 
      * @param silent if {@code true}, no sound is played on wake up
      * @return {@code true} if action was successful, else {@code false}.
      * @throws IOException if an I/O error occurs
      */
     boolean wakeup(boolean silent) throws IOException;
 
+
+    /**
+     * Enumeration of ear modes.
+     */
+    public enum EarMode {
+
+        /** Ears enabled. */
+        ENABLED,
+
+        /** Ears disabled. */
+        DISABLED;
+
+        /**
+         * Check if this ear mode disables ear movement.
+         * 
+         * @return {@code true} if ear movement is disabled
+         */
+        public boolean isDisabled() {
+            return this == DISABLED;
+        }
+
+        /**
+         * Check if this ear mode enables ear movement.
+         * 
+         * @return {@code true} if ear movement is enabled
+         */
+        public boolean isEnabled() {
+            return this == ENABLED;
+        }
+    }
 
     /**
      * Possible Karotz status.
@@ -153,7 +201,7 @@ public interface IKarotz {
 
         /**
          * Check if this status corresponds to an awake status.
-         *
+         * 
          * @return {@code true} if this is an awake status
          */
         public boolean isAwake() {
@@ -162,7 +210,7 @@ public interface IKarotz {
 
         /**
          * Check if this status corresponds to an offline status.
-         *
+         * 
          * @return {@code true} if this is an offline status
          */
         public boolean isOffline() {
@@ -171,7 +219,7 @@ public interface IKarotz {
 
         /**
          * Check if this status corresponds to an online status.
-         *
+         * 
          * @return {@code true} if this is an online status
          */
         public boolean isOnline() {
@@ -180,7 +228,7 @@ public interface IKarotz {
 
         /**
          * Check if this status corresponds to a sleeping status.
-         *
+         * 
          * @return {@code true} if this is a sleeping status
          */
         public boolean isSleeping() {
