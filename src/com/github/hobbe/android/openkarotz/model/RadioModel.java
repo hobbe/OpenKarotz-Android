@@ -28,61 +28,54 @@
 
 package com.github.hobbe.android.openkarotz.model;
 
+import java.io.Serializable;
+
 /**
- * This class represents an element of the navigation drawer.
+ * This class represents a radio station.
  */
-public class DrawerItem {
+public class RadioModel implements Serializable {
 
     /**
-     * Initialize an empty item.
+     * Initialize a radio model.
+     * @param id the radio ID
+     * @param name the radio name
+     * @param url the radio URL
      */
-    public DrawerItem() {
+    public RadioModel(String id, String name, String url) {
+        this.id = id;
+        this.name = name;
+        this.url = url;
     }
 
     /**
-     * Initialize an item with title and icon.
-     * @param title the item's title
-     * @param icon the item's icon resource ID
+     * Get the identifier.
+     *
+     * @return the id
      */
-    public DrawerItem(String title, int icon) {
-        this.title = title;
-        this.icon = icon;
+    public String getId() {
+        return id;
     }
 
     /**
-     * Get the item icon.
-     * @return the item's icon resource ID
+     * Get the name.
+     *
+     * @return the name
      */
-    public int getIcon() {
-        return this.icon;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Get the item title.
-     * @return the item's title
+     * Get the URL.
+     *
+     * @return the url
      */
-    public String getTitle() {
-        return this.title;
-    }
-
-    /**
-     * Set the item icon.
-     * @param icon the item's icon resource ID
-     */
-    public void setIcon(int icon) {
-        this.icon = icon;
-    }
-
-    /**
-     * Set the item title.
-     * @param title the item's title
-     */
-    public void setTitle(String title) {
-        this.title = title;
+    public String getUrl() {
+        return url;
     }
 
 
-    private int icon = 0;
-    private String title = null;
-
+    private final String id;
+    private final String name;
+    private final String url;
 }

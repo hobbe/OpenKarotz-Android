@@ -28,61 +28,64 @@
 
 package com.github.hobbe.android.openkarotz.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * This class represents an element of the navigation drawer.
+ * This class represents a group of radio stations.
  */
-public class DrawerItem {
+public class RadioGroupModel implements Serializable {
 
     /**
-     * Initialize an empty item.
+     * Initialize a new radio group model.
+     * @param id the group ID
+     * @param name the group name
      */
-    public DrawerItem() {
+    public RadioGroupModel(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     /**
-     * Initialize an item with title and icon.
-     * @param title the item's title
-     * @param icon the item's icon resource ID
+     * Add a radio to this group.
+     * @param radio the radio to add
      */
-    public DrawerItem(String title, int icon) {
-        this.title = title;
-        this.icon = icon;
+    public void addRadio(RadioModel radio) {
+        if (radio != null) {
+            radios.add(radio);
+        }
     }
 
     /**
-     * Get the item icon.
-     * @return the item's icon resource ID
+     * Get the identifier.
+     *
+     * @return the id
      */
-    public int getIcon() {
-        return this.icon;
+    public String getId() {
+        return id;
     }
 
     /**
-     * Get the item title.
-     * @return the item's title
+     * Get the name.
+     *
+     * @return the name
      */
-    public String getTitle() {
-        return this.title;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Set the item icon.
-     * @param icon the item's icon resource ID
+     * Get the list of radios in this group.
+     *
+     * @return the list of radio stations
      */
-    public void setIcon(int icon) {
-        this.icon = icon;
-    }
-
-    /**
-     * Set the item title.
-     * @param title the item's title
-     */
-    public void setTitle(String title) {
-        this.title = title;
+    public List<RadioModel> getRadios() {
+        return radios;
     }
 
 
-    private int icon = 0;
-    private String title = null;
-
+    private final String id;
+    private final String name;
+    private final List<RadioModel> radios = new ArrayList<RadioModel>();
 }
