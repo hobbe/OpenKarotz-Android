@@ -117,5 +117,5 @@ public class AssetUtils {
     }
 
 
-    private static final String LOG_TAG = AssetUtils.class.getName();
+    private static final String LOG_TAG = AssetUtils.class.getSimpleName();
 }

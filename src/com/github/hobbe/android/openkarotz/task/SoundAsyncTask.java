@@ -38,7 +38,7 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to make Karotz play a sound URL in the background.
  */
-public abstract class SoundAsyncTask extends KarotzAsyncTask {
+public class SoundAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
@@ -69,5 +69,5 @@ public abstract class SoundAsyncTask extends KarotzAsyncTask {
     private String sound = null;
 
     // Log tag
-    private static final String LOG_TAG = SoundAsyncTask.class.getName();
+    private static final String LOG_TAG = SoundAsyncTask.class.getSimpleName();
 }

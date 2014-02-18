@@ -66,5 +66,5 @@ public class EarsRandomAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = EarsRandomAsyncTask.class.getName();
+    private static final String LOG_TAG = EarsRandomAsyncTask.class.getSimpleName();
 }

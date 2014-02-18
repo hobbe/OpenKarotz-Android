@@ -36,15 +36,15 @@ import android.util.Log;
 import com.github.hobbe.android.openkarotz.R;
 
 /**
- * This {@link AsyncTask asynchronous task} is equipped with a {@link ProgressDialog progress dialog}
- * during communication with the Karotz. It is triggered on pre-execution step and dismissed on
- * post-execution step. Developers can override {@link #preExecute()} and {@link #postExecute(Object)}
- * to add custom code during those steps.
+ * This {@link AsyncTask asynchronous task} is equipped with a {@link ProgressDialog progress dialog} during
+ * communication with the Karotz. It is triggered on pre-execution step and dismissed on post-execution step. Developers
+ * can override {@link #preExecute()} and {@link #postExecute(Object)} to add custom code during those steps.
  */
 public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public KarotzAsyncTask(Activity activity) {
@@ -53,6 +53,7 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
 
     /**
      * Get this task's calling activity.
+     * 
      * @return the activity
      */
     public Activity getActivity() {
@@ -61,6 +62,7 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
 
     /**
      * Custom code that is executed after the task finishes, in the post-execution step.
+     * 
      * @param result the task result
      */
     public void postExecute(Object result) {
@@ -97,5 +99,5 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
     private ProgressDialog pd = null;
 
     // Log tag
-    private static final String LOG_TAG = KarotzAsyncTask.class.getName();
+    private static final String LOG_TAG = KarotzAsyncTask.class.getSimpleName();
 }

@@ -38,10 +38,11 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to get Karotz version in the background.
  */
-public abstract class GetVersionAsyncTask extends KarotzAsyncTask {
+public class GetVersionAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public GetVersionAsyncTask(Activity activity) {
@@ -49,8 +50,7 @@ public abstract class GetVersionAsyncTask extends KarotzAsyncTask {
     }
 
     /**
-     * This tasks returns the Karotz version as a {@link String} or {@code null}
-     * if the Karotz cannot be contacted.
+     * This tasks returns the Karotz version as a {@link String} or {@code null} if the Karotz cannot be contacted.
      */
     @Override
     protected String doInBackground(Object... params) {
@@ -65,5 +65,5 @@ public abstract class GetVersionAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = GetVersionAsyncTask.class.getName();
+    private static final String LOG_TAG = GetVersionAsyncTask.class.getSimpleName();
 }

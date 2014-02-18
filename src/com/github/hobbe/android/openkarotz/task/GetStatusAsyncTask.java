@@ -66,5 +66,5 @@ public class GetStatusAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = GetStatusAsyncTask.class.getName();
+    private static final String LOG_TAG = GetStatusAsyncTask.class.getSimpleName();
 }

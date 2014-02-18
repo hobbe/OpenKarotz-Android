@@ -42,6 +42,7 @@ public abstract class SleepAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public SleepAsyncTask(Activity activity) {
@@ -64,5 +65,5 @@ public abstract class SleepAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = SleepAsyncTask.class.getName();
+    private static final String LOG_TAG = SleepAsyncTask.class.getSimpleName();
 }

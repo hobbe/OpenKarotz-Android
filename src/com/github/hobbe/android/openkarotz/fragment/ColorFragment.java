@@ -399,6 +399,5 @@ public class ColorFragment extends Fragment {
             "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF", "FFFFFF", "000000"
     };
 
-    private static final String LOG_TAG = ColorFragment.class.getName();
-
+    private static final String LOG_TAG = ColorFragment.class.getSimpleName();
 }

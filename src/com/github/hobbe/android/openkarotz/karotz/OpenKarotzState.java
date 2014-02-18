@@ -195,5 +195,5 @@ public class OpenKarotzState {
 
     private static final String KEY_EARS_DISABLED = "ears_disabled";
 
-    private static final String LOG_TAG = OpenKarotzState.class.getName();
+    private static final String LOG_TAG = OpenKarotzState.class.getSimpleName();
 }

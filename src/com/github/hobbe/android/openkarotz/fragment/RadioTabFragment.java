@@ -208,6 +208,5 @@ public class RadioTabFragment extends Fragment {
     private RadioGroupModel group;
     private final Map<String, ImageButton> buttonMap = new HashMap<String, ImageButton>();
 
-    private static final String LOG_TAG = RadioTabFragment.class.getName();
-
+    private static final String LOG_TAG = RadioTabFragment.class.getSimpleName();
 }

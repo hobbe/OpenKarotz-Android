@@ -38,10 +38,11 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to wake Karotz up in the background.
  */
-public abstract class WakeupAsyncTask extends KarotzAsyncTask {
+public class WakeupAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public WakeupAsyncTask(Activity activity) {
@@ -64,5 +65,5 @@ public abstract class WakeupAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = WakeupAsyncTask.class.getName();
+    private static final String LOG_TAG = WakeupAsyncTask.class.getSimpleName();
 }

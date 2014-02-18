@@ -38,10 +38,11 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to change Karotz LED color and pulse in the background.
  */
-public abstract class LedAsyncTask extends KarotzAsyncTask {
+public class LedAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      * @param color the color to change to
      * @param pulse if {@code true}, LED will pulse
@@ -53,8 +54,7 @@ public abstract class LedAsyncTask extends KarotzAsyncTask {
     }
 
     /**
-     * This tasks returns the color code as an {@code Integer} or {@code null}
-     * if the Karotz cannot be contacted.
+     * This tasks returns the color code as an {@code Integer} or {@code null} if the Karotz cannot be contacted.
      */
     @Override
     protected Integer doInBackground(Object... params) {
@@ -73,5 +73,5 @@ public abstract class LedAsyncTask extends KarotzAsyncTask {
     private boolean pulse = true;
 
     // Log tag
-    private static final String LOG_TAG = LedAsyncTask.class.getName();
+    private static final String LOG_TAG = LedAsyncTask.class.getSimpleName();
 }

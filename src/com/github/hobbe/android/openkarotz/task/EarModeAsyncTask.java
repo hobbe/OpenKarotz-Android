@@ -69,5 +69,5 @@ public class EarModeAsyncTask extends KarotzAsyncTask {
     private final EarMode mode;
 
     // Log tag
-    private static final String LOG_TAG = EarModeAsyncTask.class.getName();
+    private static final String LOG_TAG = EarModeAsyncTask.class.getSimpleName();
 }

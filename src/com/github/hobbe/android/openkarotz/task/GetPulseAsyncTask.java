@@ -38,10 +38,11 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to get Karotz LED pulse status in the background.
  */
-public abstract class GetPulseAsyncTask extends KarotzAsyncTask {
+public class GetPulseAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public GetPulseAsyncTask(Activity activity) {
@@ -64,5 +65,5 @@ public abstract class GetPulseAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = GetPulseAsyncTask.class.getName();
+    private static final String LOG_TAG = GetPulseAsyncTask.class.getSimpleName();
 }

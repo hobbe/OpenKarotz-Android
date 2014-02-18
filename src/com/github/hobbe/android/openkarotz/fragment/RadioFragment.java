@@ -230,6 +230,5 @@ public class RadioFragment extends Fragment implements TabListener {
     private RadioTabsPagerAdapter pagerAdapter = null;
     private ActionBar actionBar = null;
 
-    private static final String LOG_TAG = RadioFragment.class.getName();
-
+    private static final String LOG_TAG = RadioFragment.class.getSimpleName();
 }

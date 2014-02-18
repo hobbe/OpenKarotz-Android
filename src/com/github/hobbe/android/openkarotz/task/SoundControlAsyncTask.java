@@ -70,5 +70,5 @@ public class SoundControlAsyncTask extends KarotzAsyncTask {
     private SoundControlCommand cmd = null;
 
     // Log tag
-    private static final String LOG_TAG = SoundControlAsyncTask.class.getName();
+    private static final String LOG_TAG = SoundControlAsyncTask.class.getSimpleName();
 }

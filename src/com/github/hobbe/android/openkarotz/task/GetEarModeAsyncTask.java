@@ -39,7 +39,7 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to get Karotz ear mode in the background.
  */
-public abstract class GetEarModeAsyncTask extends KarotzAsyncTask {
+public class GetEarModeAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
@@ -66,5 +66,5 @@ public abstract class GetEarModeAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = GetEarModeAsyncTask.class.getName();
+    private static final String LOG_TAG = GetEarModeAsyncTask.class.getSimpleName();
 }

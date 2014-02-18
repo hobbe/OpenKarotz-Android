@@ -81,7 +81,7 @@ public class NetUtils {
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
-            Log.d(TAG, "Response code: " + response);
+            Log.d(LOG_TAG, "Response code: " + response);
 
             is = conn.getInputStream();
             int len = conn.getContentLength();
@@ -91,7 +91,7 @@ public class NetUtils {
 
             // Convert the InputStream into a string
             String contentAsString = readIt(is, len);
-            Log.d(TAG, "Response string: " + contentAsString);
+            Log.d(LOG_TAG, "Response string: " + contentAsString);
 
             return contentAsString;
 
@@ -133,5 +133,5 @@ public class NetUtils {
     }
 
 
-    private static final String TAG = "NetUtils";
+    private static final String LOG_TAG = NetUtils.class.getSimpleName();
 }

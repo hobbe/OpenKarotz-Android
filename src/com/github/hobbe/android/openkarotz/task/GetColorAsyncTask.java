@@ -38,10 +38,11 @@ import com.github.hobbe.android.openkarotz.karotz.Karotz;
 /**
  * Task to get Karotz LED color in the background.
  */
-public abstract class GetColorAsyncTask extends KarotzAsyncTask {
+public class GetColorAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
+     * 
      * @param activity the calling activity
      */
     public GetColorAsyncTask(Activity activity) {
@@ -49,8 +50,7 @@ public abstract class GetColorAsyncTask extends KarotzAsyncTask {
     }
 
     /**
-     * This tasks returns the color code as an {@code Integer} or {@code null}
-     * if the Karotz cannot be contacted.
+     * This tasks returns the color code as an {@code Integer} or {@code null} if the Karotz cannot be contacted.
      */
     @Override
     protected Integer doInBackground(Object... params) {
@@ -65,5 +65,5 @@ public abstract class GetColorAsyncTask extends KarotzAsyncTask {
 
 
     // Log tag
-    private static final String LOG_TAG = GetColorAsyncTask.class.getName();
+    private static final String LOG_TAG = GetColorAsyncTask.class.getSimpleName();
 }

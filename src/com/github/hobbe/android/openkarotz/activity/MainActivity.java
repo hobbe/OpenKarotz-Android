@@ -353,7 +353,7 @@ public class MainActivity extends FragmentActivity {
 
         /**
          * Create the drawer toggle.
-         *
+         * 
          * @param activity the associated activity
          * @param layout the drawer layout
          * @param imageRes the drawer image
@@ -431,5 +431,5 @@ public class MainActivity extends FragmentActivity {
     private static final int PAGE_SYSTEM = 4;
 
     // Log tag
-    private static final String LOG_TAG = MainActivity.class.getName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 }

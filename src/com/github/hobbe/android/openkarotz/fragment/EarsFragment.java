@@ -217,6 +217,5 @@ public class EarsFragment extends Fragment {
     private Switch earsDisabledSwitch = null;
     private EarsDisabledSwitchCheckedChangeListener earsDisabledSwitchCheckedChangeListener = null;
 
-    private static final String LOG_TAG = EarsFragment.class.getName();
-
+    private static final String LOG_TAG = EarsFragment.class.getSimpleName();
 }

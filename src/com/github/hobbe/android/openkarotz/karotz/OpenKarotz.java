@@ -66,15 +66,15 @@ public class OpenKarotz implements IKarotz {
         EarMode currentMode = getEarMode();
         if (currentMode == mode) {
             // No change
-            Log.d(TAG, "No change in ear mode");
+            Log.d(LOG_TAG, "No change in ear mode");
             return mode;
         }
 
         URL url = new URL(api, CGI_BIN + "/ears_mode?disable=" + (mode.isEnabled() ? "0" : "1"));
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"return":"0","disabled":"0"}
         try {
@@ -87,7 +87,7 @@ public class OpenKarotz implements IKarotz {
                 return newMode;
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot en/disable Karotz ears: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot en/disable Karotz ears: " + e.getMessage(), e);
         }
 
         return currentMode;
@@ -96,10 +96,10 @@ public class OpenKarotz implements IKarotz {
     @Override
     public void earsRandom() throws IOException {
         URL url = new URL(api, CGI_BIN + "/ears_random");
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"left":"0","right":"0","return":"0"}
         // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
@@ -112,17 +112,17 @@ public class OpenKarotz implements IKarotz {
                 return;
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot put Karotz ears in random position: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot put Karotz ears in random position: " + e.getMessage(), e);
         }
     }
 
     @Override
     public void earsReset() throws IOException {
         URL url = new URL(api, CGI_BIN + "/ears_reset");
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"return":"0"}
         // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
@@ -135,7 +135,7 @@ public class OpenKarotz implements IKarotz {
                 return;
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot reset Karotz ears: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot reset Karotz ears: " + e.getMessage(), e);
         }
     }
 
@@ -200,10 +200,10 @@ public class OpenKarotz implements IKarotz {
         String c = toColorCode(rgb);
 
         URL url = new URL(api, CGI_BIN + "/leds?color=" + c + (pulse ? "&pulse=1" : ""));
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"color":"0000FF","secondary_color":"000000","pulse":"0","no_memory":"0","speed":"700","return":"0"}
         // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
@@ -217,7 +217,7 @@ public class OpenKarotz implements IKarotz {
                 return;
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot change LED on Karotz: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot change LED on Karotz: " + e.getMessage(), e);
         }
 
         // Not OK, set back to previous values
@@ -229,15 +229,15 @@ public class OpenKarotz implements IKarotz {
     public boolean sleep() throws IOException {
         if (isSleeping()) {
             // No change
-            Log.d(TAG, "Already sleeping, no need to go to sleep");
+            Log.d(LOG_TAG, "Already sleeping, no need to go to sleep");
             return true;
         }
 
         URL url = new URL(api, CGI_BIN + "/sleep");
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"return":"0"}
         // Answer: {"return":"1","msg":"Unable to perform action, rabbit is already sleeping."}
@@ -259,10 +259,10 @@ public class OpenKarotz implements IKarotz {
         }
 
         URL url = new URL(api, CGI_BIN + "/sound?url=" + soundUrl);
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"return":"0"}
         // Answer: {"return":"1","msg":"Unable to perform action, rabbit is sleeping."}
@@ -271,12 +271,12 @@ public class OpenKarotz implements IKarotz {
             boolean ok = "0".equals(json.getString("return"));
 
             if (ok) {
-                Log.i(TAG, "Karotz is playing sound");
+                Log.i(LOG_TAG, "Karotz is playing sound");
                 return true;
             }
-            Log.e(TAG, "Karotz cannot play the sound");
+            Log.e(LOG_TAG, "Karotz cannot play the sound");
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot make Karotz play a sound: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot make Karotz play a sound: " + e.getMessage(), e);
         }
 
         return false;
@@ -285,10 +285,10 @@ public class OpenKarotz implements IKarotz {
     @Override
     public boolean soundControl(SoundControlCommand command) throws IOException {
         URL url = new URL(api, CGI_BIN + "/sound_control?cmd=" + command.toString());
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"return":"0"}
         // Answer: {"return":"1","msg":"No sound currently playing."}
@@ -297,7 +297,7 @@ public class OpenKarotz implements IKarotz {
             JSONObject json = new JSONObject(result);
             return ("0".equals(json.getString("return")));
         } catch (JSONException e) {
-            Log.e(TAG, "Cannot call sound control on Karotz: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot call sound control on Karotz: " + e.getMessage(), e);
         }
 
         return false;
@@ -307,15 +307,15 @@ public class OpenKarotz implements IKarotz {
     public boolean wakeup(boolean silent) throws IOException {
         if (isAwake()) {
             // No change
-            Log.d(TAG, "Already awake, no need to wake up");
+            Log.d(LOG_TAG, "Already awake, no need to wake up");
             return true;
         }
 
         URL url = new URL(api, CGI_BIN + "/wakeup" + (silent ? "?silent=1" : ""));
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         // Answer: {"return":"0","silent":"1"}
         try {
@@ -342,13 +342,13 @@ public class OpenKarotz implements IKarotz {
 
     private void status() throws IOException {
         URL url = new URL(api, CGI_BIN + "/status");
-        Log.d(TAG, url.toString());
+        Log.d(LOG_TAG, url.toString());
 
         String result = NetUtils.downloadUrl(url);
-        Log.d(TAG, result);
+        Log.d(LOG_TAG, result);
 
         state = new OpenKarotzState(result);
-        Log.d(TAG, state.toString());
+        Log.d(LOG_TAG, state.toString());
     }
 
     private String toColorCode(int c) {
@@ -372,6 +372,5 @@ public class OpenKarotz implements IKarotz {
 
     private static final int PORT = 80;
 
-    private static final String TAG = OpenKarotz.class.getName();
-
+    private static final String LOG_TAG = OpenKarotz.class.getSimpleName();
 }

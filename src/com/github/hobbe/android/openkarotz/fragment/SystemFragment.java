@@ -194,5 +194,5 @@ public class SystemFragment extends Fragment {
 
     private TextView versionTextView = null;
 
-    private static final String LOG_TAG = SystemFragment.class.getName();
+    private static final String LOG_TAG = SystemFragment.class.getSimpleName();
 }
