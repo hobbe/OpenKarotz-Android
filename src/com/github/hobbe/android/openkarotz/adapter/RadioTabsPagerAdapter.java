@@ -28,7 +28,6 @@
 
 package com.github.hobbe.android.openkarotz.adapter;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -43,6 +42,7 @@ public class RadioTabsPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * Initialize the adapter.
+     * 
      * @param fm the fragment manager
      * @param groups a list of radio groups
      */
@@ -59,6 +59,7 @@ public class RadioTabsPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * Get the list of radio groups.
+     * 
      * @return the groups
      */
     public RadioGroupModel[] getGroups() {
@@ -68,12 +69,9 @@ public class RadioTabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int index) {
         RadioGroupModel group = groups[index];
-        Fragment fragment = new RadioTabFragment();
-        Bundle bundle = new Bundle(1);
-        // bundle.putString("id", group.getId());
-        // bundle.putString("name", group.getName());
-        bundle.putSerializable(RadioTabFragment.KEY_GROUP, group);
-        fragment.setArguments(bundle);
+
+        // Fragment fragment = new RadioTabFragment();
+        Fragment fragment = RadioTabFragment.newInstance(group);
         return fragment;
     }
 

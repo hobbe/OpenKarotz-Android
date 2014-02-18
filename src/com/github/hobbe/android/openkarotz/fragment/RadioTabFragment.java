@@ -65,6 +65,19 @@ public class RadioTabFragment extends Fragment {
         // Nothing to do
     }
 
+    public static RadioTabFragment newInstance(RadioGroupModel group) {
+        RadioTabFragment fragment = new RadioTabFragment();
+
+        Bundle bundle = new Bundle();
+        // bundle.putString("id", group.getId());
+        // bundle.putString("name", group.getName());
+        bundle.putSerializable(RadioTabFragment.KEY_GROUP, group);
+
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -77,9 +90,7 @@ public class RadioTabFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.tab_radio, container, false);
 
-        if (savedInstanceState != null) {
-            this.group = (RadioGroupModel) savedInstanceState.getSerializable(KEY_GROUP);
-        }
+        this.group = (RadioGroupModel) getArguments().getSerializable(KEY_GROUP);
 
         initializeView(view);
 

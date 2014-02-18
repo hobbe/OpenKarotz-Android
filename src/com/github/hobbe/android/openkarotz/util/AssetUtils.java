@@ -46,12 +46,13 @@ public class AssetUtils {
 
     /**
      * Load a bitmap image from the asset filename.
+     * 
      * @param context the context
      * @param filename the name of the image
      * @return the bitmap or {@code null}
      */
     public static Bitmap loadBitmapFromAsset(Context context, String filename) {
-        Log.d(LOG_TAG, "Loading bitmap asset " + filename);
+        Log.v(LOG_TAG, "Loading bitmap asset " + filename);
 
         Bitmap bmp = null;
         InputStream is = null;
@@ -77,6 +78,7 @@ public class AssetUtils {
 
     /**
      * Load a JSON resource from the asset filename.
+     * 
      * @param context the context
      * @param filename the name of the JSON object
      * @return the JSON object

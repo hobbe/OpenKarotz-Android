@@ -124,6 +124,7 @@ public class RadioFragment extends Fragment implements TabListener {
         pagerAdapter = new RadioTabsPagerAdapter(((FragmentActivity) getActivity()).getSupportFragmentManager(), radios);
 
         // Adding Tabs
+        actionBar.removeAllTabs();
         for (RadioGroupModel group : radios) {
             actionBar.addTab(actionBar.newTab().setText(group.getName()).setTabListener(this));
         }
@@ -165,6 +166,7 @@ public class RadioFragment extends Fragment implements TabListener {
 
     /**
      * Load a radio group.
+     * 
      * @param json the JSON object containing the radio group definition
      * @return the radio group
      */
@@ -183,7 +185,7 @@ public class RadioFragment extends Fragment implements TabListener {
                 String name = element.getString("name");
                 String url = element.getString("url");
 
-                Log.d(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
+                Log.v(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
                 group.addRadio(new RadioModel(id, name, url));
             }
 
@@ -209,6 +211,7 @@ public class RadioFragment extends Fragment implements TabListener {
                 JSONObject element = list.getJSONObject(i);
                 RadioGroupModel group = loadRadioGroup(element);
                 if (group != null) {
+                    Log.v(LOG_TAG, "Loaded radio group " + group.getName());
                     radios[i] = group;
                 }
             }
