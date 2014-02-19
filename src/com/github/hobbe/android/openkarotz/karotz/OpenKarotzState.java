@@ -51,7 +51,7 @@ public class OpenKarotzState {
 
     /**
      * Initialize a new status from a JSON input.
-     * 
+     *
      * @param json the JSON string
      */
     public OpenKarotzState(String json) {
@@ -78,7 +78,7 @@ public class OpenKarotzState {
 
     /**
      * Get the ear mode.
-     * 
+     *
      * @return the ear mode
      */
     public EarMode getEarMode() {
@@ -87,7 +87,7 @@ public class OpenKarotzState {
 
     /**
      * Get the LED color.
-     * 
+     *
      * @return the LED color
      */
     public int getLedColor() {
@@ -96,7 +96,7 @@ public class OpenKarotzState {
 
     /**
      * Get the status.
-     * 
+     *
      * @return the status
      */
     public KarotzStatus getStatus() {
@@ -105,7 +105,7 @@ public class OpenKarotzState {
 
     /**
      * Get the version.
-     * 
+     *
      * @return the version
      */
     public String getVersion() {
@@ -114,7 +114,7 @@ public class OpenKarotzState {
 
     /**
      * Check if LED is pulsing.
-     * 
+     *
      * @return the {@code true} if LED is pulsing, else {@code false}
      */
     public boolean isPulsing() {
@@ -123,8 +123,8 @@ public class OpenKarotzState {
 
     /**
      * Set the ear mode.
-     * 
-     * @param the ear mode
+     *
+     * @param mode the ear mode
      */
     public void setEarMode(EarMode mode) {
         this.earMode = mode;
@@ -132,7 +132,7 @@ public class OpenKarotzState {
 
     /**
      * Set the LED color.
-     * 
+     *
      * @param color the color to set
      */
     public void setLedColor(int color) {
@@ -141,7 +141,7 @@ public class OpenKarotzState {
 
     /**
      * Set the LED pulsing state.
-     * 
+     *
      * @param pulsing the pulsing state to set
      */
     public void setPulsing(boolean pulsing) {
@@ -150,7 +150,7 @@ public class OpenKarotzState {
 
     /**
      * Set the Karotz status.
-     * 
+     *
      * @param status the status to set
      */
     public void setStatus(KarotzStatus status) {
