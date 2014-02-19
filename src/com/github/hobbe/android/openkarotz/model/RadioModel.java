@@ -37,6 +37,7 @@ public class RadioModel implements Serializable {
 
     /**
      * Initialize a radio model.
+     * 
      * @param id the radio ID
      * @param name the radio name
      * @param url the radio URL
@@ -49,7 +50,7 @@ public class RadioModel implements Serializable {
 
     /**
      * Get the identifier.
-     *
+     * 
      * @return the id
      */
     public String getId() {
@@ -58,7 +59,7 @@ public class RadioModel implements Serializable {
 
     /**
      * Get the name.
-     *
+     * 
      * @return the name
      */
     public String getName() {
@@ -67,13 +68,15 @@ public class RadioModel implements Serializable {
 
     /**
      * Get the URL.
-     *
+     * 
      * @return the url
      */
     public String getUrl() {
         return url;
     }
 
+
+    private static final long serialVersionUID = 2410850697407208635L;
 
     private final String id;
     private final String name;

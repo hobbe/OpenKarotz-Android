@@ -39,6 +39,7 @@ public class RadioGroupModel implements Serializable {
 
     /**
      * Initialize a new radio group model.
+     * 
      * @param id the group ID
      * @param name the group name
      */
@@ -49,6 +50,7 @@ public class RadioGroupModel implements Serializable {
 
     /**
      * Add a radio to this group.
+     * 
      * @param radio the radio to add
      */
     public void addRadio(RadioModel radio) {
@@ -59,7 +61,7 @@ public class RadioGroupModel implements Serializable {
 
     /**
      * Get the identifier.
-     *
+     * 
      * @return the id
      */
     public String getId() {
@@ -68,7 +70,7 @@ public class RadioGroupModel implements Serializable {
 
     /**
      * Get the name.
-     *
+     * 
      * @return the name
      */
     public String getName() {
@@ -77,13 +79,15 @@ public class RadioGroupModel implements Serializable {
 
     /**
      * Get the list of radios in this group.
-     *
+     * 
      * @return the list of radio stations
      */
     public List<RadioModel> getRadios() {
         return radios;
     }
 
+
+    private static final long serialVersionUID = -7413930202889982220L;
 
     private final String id;
     private final String name;

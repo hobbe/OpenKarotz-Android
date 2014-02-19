@@ -61,6 +61,14 @@ public class OpenKarotz implements IKarotz {
         }
     }
 
+    private static String toColorCode(int c) {
+        String cc = Integer.toHexString(c);
+        while (cc.length() < 6) {
+            cc = '0' + cc;
+        }
+        return cc;
+    }
+
     @Override
     public EarMode earsMode(EarMode mode) throws IOException {
         EarMode currentMode = getEarMode();
@@ -349,14 +357,6 @@ public class OpenKarotz implements IKarotz {
 
         state = new OpenKarotzState(result);
         Log.d(LOG_TAG, state.toString());
-    }
-
-    private String toColorCode(int c) {
-        String cc = Integer.toHexString(c);
-        while (cc.length() < 6) {
-            cc = '0' + cc;
-        }
-        return cc;
     }
 
 
