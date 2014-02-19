@@ -43,8 +43,9 @@ public class EarModeAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
-     * 
+     *
      * @param activity the calling activity
+     * @param mode the ear mode to set
      */
     public EarModeAsyncTask(Activity activity, EarMode mode) {
         super(activity);
