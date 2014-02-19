@@ -66,6 +66,7 @@ public class RadioFragment extends Fragment implements TabListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onCreate, bundle: " + savedInstanceState);
         super.onCreate(savedInstanceState);
 
         radioGroups = loadRadios();
@@ -73,7 +74,7 @@ public class RadioFragment extends Fragment implements TabListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView");
+        Log.v(LOG_TAG, "onCreateView, bundle: " + savedInstanceState);
 
         // Fetch the selected page number
         int index = getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
@@ -98,14 +99,14 @@ public class RadioFragment extends Fragment implements TabListener {
 
     @Override
     public void onPause() {
-        Log.d(LOG_TAG, "onPause");
+        Log.v(LOG_TAG, "onPause");
         super.onPause();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
     }
 
     @Override
     public void onResume() {
-        Log.d(LOG_TAG, "onResume");
+        Log.v(LOG_TAG, "onResume");
         super.onResume();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
     }
@@ -117,6 +118,7 @@ public class RadioFragment extends Fragment implements TabListener {
 
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
+        Log.v(LOG_TAG, "onTabSelected position #" + tab.getPosition());
         viewPager.setCurrentItem(tab.getPosition());
     }
 
@@ -126,6 +128,7 @@ public class RadioFragment extends Fragment implements TabListener {
     }
 
     private void initializePagerAdapter(View view) {
+        Log.v(LOG_TAG, "Initializing pager adapter");
 
         pagerAdapter = new RadioTabsPagerAdapter(((FragmentActivity) getActivity()).getSupportFragmentManager(), radioGroups);
 
@@ -137,7 +140,7 @@ public class RadioFragment extends Fragment implements TabListener {
     }
 
     private void initializeView(View view) {
-        Log.d(LOG_TAG, "Initializing radio fragment view.");
+        Log.v(LOG_TAG, "Initializing radio fragment view");
 
         // View pager
         initializeViewPager(view);
@@ -150,7 +153,10 @@ public class RadioFragment extends Fragment implements TabListener {
     }
 
     private void initializeViewPager(View view) {
+        Log.v(LOG_TAG, "Initializing view pager");
+
         viewPager = (ViewPager) view.findViewById(R.id.pagerRadio);
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -180,7 +186,11 @@ public class RadioFragment extends Fragment implements TabListener {
 
         RadioGroupModel group = null;
         try {
-            group = new RadioGroupModel(json.getString("id"), json.getString("name"));
+            String groupId = json.getString("id");
+            String groupName = json.getString("name");
+            Log.d(LOG_TAG, "Loading radio group: " + groupName);
+
+            group = new RadioGroupModel(groupId, groupName);
 
             JSONArray list = json.getJSONArray("radios");
 
@@ -203,6 +213,7 @@ public class RadioFragment extends Fragment implements TabListener {
     }
 
     private RadioGroupModel[] loadRadios() {
+        Log.d(LOG_TAG, "Loading radio list");
 
         RadioGroupModel[] radios = null;
 

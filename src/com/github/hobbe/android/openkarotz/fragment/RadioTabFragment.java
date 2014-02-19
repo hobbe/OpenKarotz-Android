@@ -65,19 +65,6 @@ public class RadioTabFragment extends Fragment {
         // Nothing to do
     }
 
-    public static RadioTabFragment newInstance(RadioGroupModel group) {
-        RadioTabFragment fragment = new RadioTabFragment();
-
-        Bundle bundle = new Bundle();
-        // bundle.putString("id", group.getId());
-        // bundle.putString("name", group.getName());
-        bundle.putSerializable(RadioTabFragment.KEY_GROUP, group);
-
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -144,6 +131,22 @@ public class RadioTabFragment extends Fragment {
         for (ImageButton button : buttonMap.values()) {
             button.setEnabled(enable);
         }
+    }
+
+    /**
+     * Create a new instance of a radio list fragment for the given group of radio stations.
+     * @param group the group of radio stations
+     * @return a new fragment
+     */
+    public static RadioTabFragment newInstance(RadioGroupModel group) {
+        RadioTabFragment fragment = new RadioTabFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(RadioTabFragment.KEY_GROUP, group);
+
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
 
