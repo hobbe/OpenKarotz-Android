@@ -44,7 +44,7 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
 
     /**
      * Initialize a new task.
-     * 
+     *
      * @param activity the calling activity
      */
     public KarotzAsyncTask(Activity activity) {
@@ -53,7 +53,7 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
 
     /**
      * Get this task's calling activity.
-     * 
+     *
      * @return the activity
      */
     public Activity getActivity() {
@@ -62,7 +62,7 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
 
     /**
      * Custom code that is executed after the task finishes, in the post-execution step.
-     * 
+     *
      * @param result the task result
      */
     public void postExecute(Object result) {
@@ -80,16 +80,15 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
     protected void onPostExecute(Object result) {
         pd.dismiss();
         pd = null;
-        Log.d(LOG_TAG, "Progress dialog dismissed");
+        Log.v(LOG_TAG, "Progress dialog dismissed");
 
         postExecute(result);
     }
 
     @Override
     protected void onPreExecute() {
-        Log.d(LOG_TAG, "Showing progress dialog...");
-        pd = ProgressDialog.show(activity, activity.getString(R.string.progress_karotz_title),
-                                 activity.getString(R.string.progress_karotz_description));
+        Log.v(LOG_TAG, "Showing progress dialog...");
+        pd = ProgressDialog.show(activity, activity.getString(R.string.progress_karotz_title), activity.getString(R.string.progress_karotz_description));
 
         preExecute();
     }

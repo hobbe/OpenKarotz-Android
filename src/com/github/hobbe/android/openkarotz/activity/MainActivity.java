@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -71,6 +72,21 @@ import com.github.hobbe.android.openkarotz.task.SoundControlAsyncTask;
  * Main activity.
  */
 public class MainActivity extends FragmentActivity {
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getFragmentManager();
+        int count = fragmentManager.getBackStackEntryCount();
+
+        // Any going back?
+        if (count > 0) {
+            fragmentManager.popBackStack();
+            return;
+        }
+
+        // Else default handling
+        super.onBackPressed();
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -147,6 +163,8 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onCreate, bundle: " + savedInstanceState);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -172,6 +190,7 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onPostCreate, bundle: " + savedInstanceState);
         super.onPostCreate(savedInstanceState);
 
         // Sync the toggle state after onRestoreInstanceState has occurred.
@@ -221,6 +240,39 @@ public class MainActivity extends FragmentActivity {
         drawerList.setEnabled(true);
     }
 
+    private Fragment getColorFragment() {
+        if (colorFragment == null) {
+            colorFragment = new ColorFragment();
+
+            Bundle args = new Bundle();
+            args.putInt(ARG_PAGE_NUMBER, PAGE_COLOR);
+            colorFragment.setArguments(args);
+        }
+        return colorFragment;
+    }
+
+    private Fragment getEarsFragment() {
+        if (earsFragment == null) {
+            earsFragment = new EarsFragment();
+
+            Bundle args = new Bundle();
+            args.putInt(ARG_PAGE_NUMBER, PAGE_EARS);
+            earsFragment.setArguments(args);
+        }
+        return earsFragment;
+    }
+
+    private Fragment getHomeFragment() {
+        if (homeFragment == null) {
+            homeFragment = new HomeFragment();
+
+            Bundle args = new Bundle();
+            args.putInt(ARG_PAGE_NUMBER, PAGE_HOME);
+            homeFragment.setArguments(args);
+        }
+        return homeFragment;
+    }
+
     private String getPrefKarotzHost() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String h = prefs.getString(SettingsActivity.KEY_PREF_KAROTZ_HOST, null);
@@ -228,6 +280,28 @@ public class MainActivity extends FragmentActivity {
             h = null;
         }
         return h;
+    }
+
+    private Fragment getRadioFragment() {
+        if (radioFragment == null) {
+            radioFragment = new RadioFragment();
+
+            Bundle args = new Bundle();
+            args.putInt(ARG_PAGE_NUMBER, PAGE_RADIO);
+            radioFragment.setArguments(args);
+        }
+        return radioFragment;
+    }
+
+    private Fragment getSystemFragment() {
+        if (systemFragment == null) {
+            systemFragment = new SystemFragment();
+
+            Bundle args = new Bundle();
+            args.putInt(ARG_PAGE_NUMBER, PAGE_SYSTEM);
+            systemFragment.setArguments(args);
+        }
+        return systemFragment;
     }
 
     private String getVersion() {
@@ -290,49 +364,62 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void selectDrawerItem(int position) {
+        Log.v(LOG_TAG, "selectDrawerItem #" + position);
 
         // Create a new fragment based on position
         Fragment fragment = null;
+        boolean allowBack = false;
 
         switch (position) {
         case PAGE_HOME:
-            fragment = new HomeFragment();
+            fragment = getHomeFragment();
             break;
 
         case PAGE_RADIO:
-            fragment = new RadioFragment();
+            fragment = getRadioFragment();
+            allowBack = true;
             break;
 
         case PAGE_COLOR:
-            fragment = new ColorFragment();
+            fragment = getColorFragment();
+            allowBack = true;
             break;
 
         case PAGE_EARS:
-            fragment = new EarsFragment();
+            fragment = getEarsFragment();
+            allowBack = true;
             break;
 
         case PAGE_SYSTEM:
-            fragment = new SystemFragment();
+            fragment = getSystemFragment();
+            allowBack = true;
             break;
 
         default:
-            fragment = new HomeFragment();
+            fragment = getHomeFragment();
             break;
         }
 
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE_NUMBER, position);
-        fragment.setArguments(args);
-
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.content_frame, fragment);
 
-        // Highlight the selected item, update the title, and close the drawer
+        // Add transaction to back stack
+        if (allowBack) {
+            transaction.addToBackStack(null);
+        }
+
+        // Commit
+        transaction.commit();
+
+        // Highlight the selected item
         drawerList.setItemChecked(position, true);
+
+        // Update the title
         setTitle(pageTitles[position]);
 
-        // Closing the drawer
+        // Close the drawer
         drawerLayout.closeDrawer(drawerList);
     }
 
@@ -353,7 +440,7 @@ public class MainActivity extends FragmentActivity {
 
         /**
          * Create the drawer toggle.
-         * 
+         *
          * @param activity the associated activity
          * @param layout the drawer layout
          * @param imageRes the drawer image
@@ -414,6 +501,12 @@ public class MainActivity extends FragmentActivity {
     private DrawerLayout drawerLayout = null;
     private ListView drawerList = null;
     private ActionBarDrawerToggle drawerToggle = null;
+
+    private Fragment homeFragment;
+    private Fragment radioFragment;
+    private Fragment colorFragment;
+    private Fragment earsFragment;
+    private Fragment systemFragment;
 
     // Activity settings
     private static final int RESULT_SETTINGS = 1;

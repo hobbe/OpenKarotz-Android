@@ -75,29 +75,26 @@ public class ColorFragment extends Fragment {
         // Nothing to initialize
     }
 
-    private static int darker(final int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.8f;
-        return Color.HSVToColor(hsv);
-    }
-
-    private static int lighter(final int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = 1.0f - 0.5f * (1.0f - hsv[2]);
-        return Color.HSVToColor(hsv);
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onActivityCreated, bundle: " + savedInstanceState);
         super.onActivityCreated(savedInstanceState);
 
         new GetStatusTask(getActivity()).execute();
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onCreate, bundle: " + savedInstanceState);
+        super.onCreate(savedInstanceState);
+
+        // Load colors from asset
+        colors = loadColorsFromAsset();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onCreateView, bundle: " + savedInstanceState);
 
         // Fetch the selected page number
         int index = getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
@@ -133,7 +130,7 @@ public class ColorFragment extends Fragment {
 
         buttonMap = new HashMap<String, Button>();
 
-        for (String c : loadColorsFromAsset()) {
+        for (String c : colors) {
             int color = Color.parseColor('#' + c);
 
             // Button
@@ -168,15 +165,15 @@ public class ColorFragment extends Fragment {
             JSONArray list = json.getJSONArray("colors");
 
             int count = list.length();
-            String[] colors = new String[count];
+            String[] colorCodes = new String[count];
 
             for (int i = 0; i < count; i++) {
                 JSONObject element = list.getJSONObject(i);
-                colors[i] = element.getString("code");
+                colorCodes[i] = element.getString("code");
             }
 
             Log.i(LOG_TAG, "Using color set from asset colors.json");
-            return colors;
+            return colorCodes;
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
@@ -222,6 +219,20 @@ public class ColorFragment extends Fragment {
         for (Button button : buttonMap.values()) {
             button.setEnabled(enable);
         }
+    }
+
+    private static int darker(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.8f;
+        return Color.HSVToColor(hsv);
+    }
+
+    private static int lighter(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = 1.0f - 0.5f * (1.0f - hsv[2]);
+        return Color.HSVToColor(hsv);
     }
 
 
@@ -394,6 +405,8 @@ public class ColorFragment extends Fragment {
     private FlowLayout colorLayout = null;
 
     private HashMap<String, Button> buttonMap = null;
+
+    private String[] colors = null;
 
     private static final String[] DEFAULT_COLORS = {
             "FF0000", "00FF00", "0000FF", "FF00FF", "FFFF00", "00FFFF", "FFFFFF", "000000"

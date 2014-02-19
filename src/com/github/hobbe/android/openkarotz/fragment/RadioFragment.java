@@ -65,6 +65,13 @@ public class RadioFragment extends Fragment implements TabListener {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        radioGroups = loadRadios();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView");
 
@@ -119,13 +126,12 @@ public class RadioFragment extends Fragment implements TabListener {
     }
 
     private void initializePagerAdapter(View view) {
-        RadioGroupModel[] radios = loadRadios();
 
-        pagerAdapter = new RadioTabsPagerAdapter(((FragmentActivity) getActivity()).getSupportFragmentManager(), radios);
+        pagerAdapter = new RadioTabsPagerAdapter(((FragmentActivity) getActivity()).getSupportFragmentManager(), radioGroups);
 
         // Adding Tabs
         actionBar.removeAllTabs();
-        for (RadioGroupModel group : radios) {
+        for (RadioGroupModel group : radioGroups) {
             actionBar.addTab(actionBar.newTab().setText(group.getName()).setTabListener(this));
         }
     }
@@ -166,7 +172,7 @@ public class RadioFragment extends Fragment implements TabListener {
 
     /**
      * Load a radio group.
-     * 
+     *
      * @param json the JSON object containing the radio group definition
      * @return the radio group
      */
@@ -229,6 +235,8 @@ public class RadioFragment extends Fragment implements TabListener {
     private ViewPager viewPager = null;
     private RadioTabsPagerAdapter pagerAdapter = null;
     private ActionBar actionBar = null;
+
+    private RadioGroupModel[] radioGroups = null;
 
     private static final String LOG_TAG = RadioFragment.class.getSimpleName();
 }
