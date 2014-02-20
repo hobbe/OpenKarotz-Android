@@ -66,8 +66,10 @@ public class EarsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        new GetStatusTask(getActivity()).execute();
-        new GetEarModeTask(getActivity()).execute();
+        if (savedInstanceState == null) {
+            new GetStatusTask(getActivity()).execute();
+            new GetEarModeTask(getActivity()).execute();
+        }
     }
 
     @Override

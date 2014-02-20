@@ -369,41 +369,53 @@ public class MainActivity extends FragmentActivity {
         // Create a new fragment based on position
         Fragment fragment = null;
         boolean allowBack = false;
+        String tag = String.valueOf(position);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        fragment = fragmentManager.findFragmentByTag(tag);
 
         switch (position) {
         case PAGE_HOME:
-            fragment = getHomeFragment();
+            if (fragment == null) {
+                fragment = getHomeFragment();
+            }
             break;
 
         case PAGE_RADIO:
-            fragment = getRadioFragment();
+            if (fragment == null) {
+                fragment = getRadioFragment();
+            }
             allowBack = true;
             break;
 
         case PAGE_COLOR:
-            fragment = getColorFragment();
+            if (fragment == null) {
+                fragment = getColorFragment();
+            }
             allowBack = true;
             break;
 
         case PAGE_EARS:
-            fragment = getEarsFragment();
+            if (fragment == null) {
+                fragment = getEarsFragment();
+            }
             allowBack = true;
             break;
 
         case PAGE_SYSTEM:
-            fragment = getSystemFragment();
+            if (fragment == null) {
+                fragment = getSystemFragment();
+            }
             allowBack = true;
             break;
 
         default:
-            fragment = getHomeFragment();
             break;
         }
 
         // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.content_frame, fragment);
+        transaction.replace(R.id.content_frame, fragment, String.valueOf(position));
 
         // Add transaction to back stack
         if (allowBack) {
@@ -440,7 +452,7 @@ public class MainActivity extends FragmentActivity {
 
         /**
          * Create the drawer toggle.
-         *
+         * 
          * @param activity the associated activity
          * @param layout the drawer layout
          * @param imageRes the drawer image

@@ -61,6 +61,16 @@ public class SystemFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            new GetStatusTask(getActivity()).execute();
+            new GetVersionTask(getActivity()).execute();
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Fetch the selected page number
@@ -76,9 +86,6 @@ public class SystemFragment extends Fragment {
         View view = inflater.inflate(R.layout.page_system, container, false);
 
         initializeView(view);
-
-        new GetStatusTask(getActivity()).execute();
-        new GetVersionTask(getActivity()).execute();
 
         return view;
     }
