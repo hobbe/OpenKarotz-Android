@@ -43,12 +43,16 @@ import android.widget.Switch;
 import com.github.hobbe.android.openkarotz.R;
 import com.github.hobbe.android.openkarotz.activity.MainActivity;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarMode;
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarPosition;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 import com.github.hobbe.android.openkarotz.task.EarModeAsyncTask;
+import com.github.hobbe.android.openkarotz.task.EarsAsyncTask;
 import com.github.hobbe.android.openkarotz.task.EarsRandomAsyncTask;
 import com.github.hobbe.android.openkarotz.task.EarsResetAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetEarModeAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
+import com.github.hobbe.android.openkarotz.widget.RotaryKnob;
+import com.github.hobbe.android.openkarotz.widget.RotaryKnob.RotaryKnobListener;
 
 /**
  * Ears fragment.
@@ -106,6 +110,25 @@ public class EarsFragment extends Fragment {
         earsDisabledSwitch.setOnCheckedChangeListener(earsDisabledSwitchCheckedChangeListener);
     }
 
+    private void initializeEarsKnob(View view) {
+        earsKnob = (RotaryKnob) view.findViewById(R.id.rotaryKnobEars);
+
+        earsKnob.setKnobListener(new RotaryKnobListener() {
+
+            @Override
+            public void onKnobChanged(int direction, int angle) {
+                // TODO: show position in TextView?
+            }
+
+            @Override
+            public void onKnobReleased(int direction, int angle) {
+                EarPosition pos = EarPosition.fromAngle(angle);
+                // Log.v(LOG_TAG, "Knob released on " + angle + "°, ear position " + pos.toString());
+                new RotateEarsTask(getActivity(), pos).execute();
+            }
+        });
+    }
+
     private void initializeEarsRandom(View view) {
         earsRandomButton = (ImageButton) view.findViewById(R.id.buttonEarsRandom);
 
@@ -131,6 +154,9 @@ public class EarsFragment extends Fragment {
     }
 
     private void initializeView(View view) {
+        // Ears knob
+        initializeEarsKnob(view);
+
         // Ears reset
         initializeEarsReset(view);
 
@@ -213,7 +239,21 @@ public class EarsFragment extends Fragment {
         }
     }
 
+    private class RotateEarsTask extends EarsAsyncTask {
 
+        public RotateEarsTask(Activity activity, EarPosition position) {
+            // Note: same position for both ears
+            super(activity, position, position);
+        }
+
+        @Override
+        public void postExecute(Object result) {
+            // TODO: Nothing to do?
+        }
+    }
+
+
+    private RotaryKnob earsKnob = null;
     private ImageButton earsResetButton = null;
     private ImageButton earsRandomButton = null;
     private Switch earsDisabledSwitch = null;

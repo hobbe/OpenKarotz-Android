@@ -43,7 +43,7 @@
     <!-- Strings related to Ears fragment -->
 
     <string name="ears_reset_label">Réinitialiser la position</string>
-    <string name="ears_reset_text">Réinitialiser</string>
+    <string name="ears_reset_desc">Réinitialiser</string>
     <string name="ears_random_label">Position aléatoire</string>
     <string name="ears_random_desc">Aléatoire</string>
     <string name="ears_disabled_label">Désactiver les oreilles</string>
