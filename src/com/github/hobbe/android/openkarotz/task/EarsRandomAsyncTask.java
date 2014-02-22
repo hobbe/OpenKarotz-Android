@@ -59,7 +59,7 @@ public class EarsRandomAsyncTask extends KarotzAsyncTask {
             Karotz.getInstance().earsRandom();
             return null;
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Cannot change Karotz LED color: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot change Karotz ear to random position: " + e.getMessage(), e);
             return null;
         }
     }

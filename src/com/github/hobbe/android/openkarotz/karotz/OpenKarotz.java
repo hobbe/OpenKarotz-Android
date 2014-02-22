@@ -47,7 +47,6 @@ public class OpenKarotz implements IKarotz {
 
     /**
      * Initialize a new OpenKarotz instance.
-     * 
      * @param hostname the hostname or IP
      */
     public OpenKarotz(String hostname) {
@@ -67,6 +66,34 @@ public class OpenKarotz implements IKarotz {
             cc = '0' + cc;
         }
         return cc;
+    }
+
+    @Override
+    public EarPosition[] ears(EarPosition left, EarPosition right) throws IOException {
+        EarPosition[] newPositions = new EarPosition[] {
+                EarPosition.POSITION_1, EarPosition.POSITION_1
+        };
+
+        URL url = new URL(api, CGI_BIN + "/ears?noreset=1&left=" + left.toString() + "&right=" + right.toString());
+        Log.d(LOG_TAG, url.toString());
+
+        String result = NetUtils.downloadUrl(url);
+        Log.d(LOG_TAG, result);
+
+        // Answer: {"return":"0","left":"0","right":"0"}
+        try {
+            JSONObject json = new JSONObject(result);
+            boolean ok = "0".equals(json.getString("return"));
+
+            if (ok) {
+                // newPositions[0] = json.getString("left");
+                // newPositions[1] = json.getString("right");
+            }
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Cannot move Karotz ears: " + e.getMessage(), e);
+        }
+
+        return newPositions;
     }
 
     @Override

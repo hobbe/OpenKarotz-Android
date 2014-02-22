@@ -33,38 +33,45 @@ import java.io.IOException;
 import android.app.Activity;
 import android.util.Log;
 
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarPosition;
 import com.github.hobbe.android.openkarotz.karotz.Karotz;
 
 /**
- * Task to reset Karotz ears in the background.
+ * Task to change Karotz ear positions in the background.
  */
-public class EarsResetAsyncTask extends KarotzAsyncTask {
+public class EarsAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
      * 
      * @param activity the calling activity
+     * @param left the left ear position to set
+     * @param right the right ear position to set
      */
-    public EarsResetAsyncTask(Activity activity) {
+    public EarsAsyncTask(Activity activity, EarPosition left, EarPosition right) {
         super(activity);
+        this.left = left;
+        this.right = right;
     }
 
     /**
-     * This tasks does not return anything ({@code null}).
+     * This tasks returns the ear positions.
      */
     @Override
-    protected Void doInBackground(Object... params) {
+    protected EarPosition[] doInBackground(Object... params) {
 
         try {
-            Karotz.getInstance().earsReset();
-            return null;
+            return Karotz.getInstance().ears(left, right);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Cannot reset Karotz ear position: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot change Karotz ear position: " + e.getMessage(), e);
             return null;
         }
     }
 
 
+    private final EarPosition left;
+    private final EarPosition right;
+
     // Log tag
-    private static final String LOG_TAG = EarsResetAsyncTask.class.getSimpleName();
+    private static final String LOG_TAG = EarsAsyncTask.class.getSimpleName();
 }

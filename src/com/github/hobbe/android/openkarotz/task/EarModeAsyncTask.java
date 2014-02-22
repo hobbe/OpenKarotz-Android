@@ -43,7 +43,7 @@ public class EarModeAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
-     *
+     * 
      * @param activity the calling activity
      * @param mode the ear mode to set
      */
@@ -61,7 +61,7 @@ public class EarModeAsyncTask extends KarotzAsyncTask {
         try {
             return Karotz.getInstance().earsMode(mode);
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Cannot change Karotz LED color: " + e.getMessage(), e);
+            Log.e(LOG_TAG, "Cannot change Karotz ear mode: " + e.getMessage(), e);
             return null;
         }
     }
