@@ -84,6 +84,15 @@ public class RotaryKnob extends ImageView {
     }
 
     /**
+     * Set the knob angle.
+     * @param angle the knob angle
+     */
+    public void setAngle(float angle) {
+        this.angle = angle;
+        invalidate();
+    }
+
+    /**
      * Set the knob listener.
      * @param l the listener to set
      */
