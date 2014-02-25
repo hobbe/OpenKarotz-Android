@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentManager.OnBackStackChangedListener;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,14 +75,26 @@ import com.github.hobbe.android.openkarotz.task.SoundControlAsyncTask;
 public class MainActivity extends FragmentActivity {
 
     @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        Log.d(LOG_TAG, "Fragment attached: " + fragment);
+        currentFragment = fragment;
+        updateDrawerSelection(fragment);
+    }
+
+    @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = getFragmentManager();
-        int count = fragmentManager.getBackStackEntryCount();
 
-        // Any going back?
-        if (count > 0) {
-            fragmentManager.popBackStack();
-            return;
+        if (fragmentManager != null) {
+            int count = fragmentManager.getBackStackEntryCount();
+
+            // Any going back?
+            if (count > 0) {
+                fragmentManager.popBackStack();
+                return;
+            }
         }
 
         // Else default handling
@@ -168,16 +181,16 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            fragmentManager.addOnBackStackChangedListener(new BackStackChangedListener());
+        }
+
         appTitle = drawerTitle = getTitle();
         pageTitles = getResources().getStringArray(R.array.pages);
 
         initializeDrawer();
-
-        // Enabling Home button
-        getActionBar().setHomeButtonEnabled(true);
-
-        // Enabling Up navigation
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        initializeActionBar();
 
         // Disable all fields
         disableFields();
@@ -314,6 +327,14 @@ public class MainActivity extends FragmentActivity {
         return versionName;
     }
 
+    private void initializeActionBar() {
+        // Enabling Home button
+        getActionBar().setHomeButtonEnabled(true);
+
+        // Enabling Up navigation
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     /**
      * Put everything in place to provide the drawer: drawer layout, drawer toggle and drawer list.
      */
@@ -425,16 +446,42 @@ public class MainActivity extends FragmentActivity {
         // Commit
         transaction.commit();
 
-        // Highlight the selected item
-        drawerList.setItemChecked(position, true);
-
-        // Update the title
-        setTitle(pageTitles[position]);
+        // Set selected item in drawer
+        updateDrawerSelection(position);
 
         // Close the drawer
         drawerLayout.closeDrawer(drawerList);
     }
 
+    private void updateDrawerSelection(Fragment fragment) {
+        // Fetch the selected page number
+        int position = fragment.getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
+
+        updateDrawerSelection(position);
+    }
+
+    private void updateDrawerSelection(int position) {
+        // Highlight the selected item
+        drawerList.setItemChecked(position, true);
+
+        // Update the title
+        setTitle(pageTitles[position]);
+    }
+
+
+    private class BackStackChangedListener implements OnBackStackChangedListener {
+
+        @Override
+        public void onBackStackChanged() {
+            Log.d(LOG_TAG, "Back stack changed!");
+            FragmentManager manager = getFragmentManager();
+
+            if (manager != null) {
+                // Fragment f = (Fragment) manager.findFragmentById(R.id.fragmentItem);
+                // f.onFragmentResume();
+            }
+        }
+    }
 
     /**
      * Click listener for drawer item.
@@ -452,7 +499,7 @@ public class MainActivity extends FragmentActivity {
 
         /**
          * Create the drawer toggle.
-         * 
+         *
          * @param activity the associated activity
          * @param layout the drawer layout
          * @param imageRes the drawer image
@@ -514,6 +561,7 @@ public class MainActivity extends FragmentActivity {
     private ListView drawerList = null;
     private ActionBarDrawerToggle drawerToggle = null;
 
+    private Fragment currentFragment = null;
     private Fragment homeFragment;
     private Fragment radioFragment;
     private Fragment colorFragment;
