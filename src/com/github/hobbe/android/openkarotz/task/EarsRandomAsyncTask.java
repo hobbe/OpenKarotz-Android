@@ -33,6 +33,7 @@ import java.io.IOException;
 import android.app.Activity;
 import android.util.Log;
 
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarPosition;
 import com.github.hobbe.android.openkarotz.karotz.Karotz;
 
 /**
@@ -42,7 +43,6 @@ public class EarsRandomAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
-     * 
      * @param activity the calling activity
      */
     public EarsRandomAsyncTask(Activity activity) {
@@ -53,11 +53,10 @@ public class EarsRandomAsyncTask extends KarotzAsyncTask {
      * This tasks does not return anything ({@code null}).
      */
     @Override
-    protected Void doInBackground(Object... params) {
+    protected EarPosition[] doInBackground(Object... params) {
 
         try {
-            Karotz.getInstance().earsRandom();
-            return null;
+            return Karotz.getInstance().earsRandom();
         } catch (IOException e) {
             Log.e(LOG_TAG, "Cannot change Karotz ear to random position: " + e.getMessage(), e);
             return null;

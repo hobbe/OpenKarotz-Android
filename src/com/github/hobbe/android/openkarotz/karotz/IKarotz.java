@@ -56,9 +56,10 @@ public interface IKarotz {
 
     /**
      * Turn ears in a random position.
+     * @return the resulting ear positions as array[left, right]
      * @throws IOException if an I/O error occurs
      */
-    void earsRandom() throws IOException;
+    EarPosition[] earsRandom() throws IOException;
 
     /**
      * Reset ear position.
@@ -287,6 +288,22 @@ public interface IKarotz {
             default:
                 return EarPosition.POSITION_1;
             }
+        }
+
+        /**
+         * Get the position value.
+         * @return the position value
+         */
+        public byte getPosition() {
+            return position;
+        }
+
+        /**
+         * Get the angle corresponding to the ear position.
+         * @return the angle, 0 to 360°
+         */
+        public int toAngle() {
+            return Math.round(position * 360.0f / 16.0f);
         }
 
         @Override

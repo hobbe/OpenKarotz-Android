@@ -136,7 +136,7 @@ public class EarsFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                new EarsRandomAsyncTask(getActivity()).execute();
+                new EarsRandomTask(getActivity()).execute();
             }
         });
     }
@@ -203,6 +203,26 @@ public class EarsFragment extends Fragment {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             Log.d(LOG_TAG, "Ears disabled switch " + (isChecked ? "" : "un") + "checked");
             new EarModeTask(getActivity(), isChecked ? EarMode.DISABLED : EarMode.ENABLED).execute();
+        }
+    }
+
+    private class EarsRandomTask extends EarsRandomAsyncTask {
+
+        public EarsRandomTask(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void postExecute(Object result) {
+            super.postExecute(result);
+
+            if (result != null) {
+                EarPosition[] positions = (EarPosition[]) result;
+                // Note: currently one one knob for both ears
+                int angle = positions[0].toAngle();
+                Log.v(LOG_TAG, "Setting angle to " + angle + "°");
+                earsKnob.setAngle(angle * 1.0f);
+            }
         }
     }
 

@@ -86,8 +86,8 @@ public class OpenKarotz implements IKarotz {
             boolean ok = "0".equals(json.getString("return"));
 
             if (ok) {
-                // newPositions[0] = json.getString("left");
-                // newPositions[1] = json.getString("right");
+                newPositions[0] = EarPosition.fromIntValue(Integer.valueOf(json.getString("left")).intValue());
+                newPositions[1] = EarPosition.fromIntValue(Integer.valueOf(json.getString("right")).intValue());
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Cannot move Karotz ears: " + e.getMessage(), e);
@@ -129,7 +129,11 @@ public class OpenKarotz implements IKarotz {
     }
 
     @Override
-    public void earsRandom() throws IOException {
+    public EarPosition[] earsRandom() throws IOException {
+        EarPosition[] newPositions = new EarPosition[] {
+                EarPosition.POSITION_1, EarPosition.POSITION_1
+        };
+
         URL url = new URL(api, CGI_BIN + "/ears_random");
         Log.d(LOG_TAG, url.toString());
 
@@ -144,11 +148,14 @@ public class OpenKarotz implements IKarotz {
             boolean ok = "0".equals(json.getString("return"));
 
             if (ok) {
-                return;
+                newPositions[0] = EarPosition.fromIntValue(Integer.valueOf(json.getString("left")).intValue());
+                newPositions[1] = EarPosition.fromIntValue(Integer.valueOf(json.getString("right")).intValue());
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Cannot put Karotz ears in random position: " + e.getMessage(), e);
         }
+
+        return newPositions;
     }
 
     @Override
