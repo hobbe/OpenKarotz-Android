@@ -35,10 +35,9 @@ import org.json.JSONObject;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,42 +61,6 @@ public class RadioFragment extends Fragment implements TabListener {
      */
     public RadioFragment() {
         // Nothing to initialize
-    }
-
-    /**
-     * Load a radio group.
-     * 
-     * @param json the JSON object containing the radio group definition
-     * @return the radio group
-     */
-    private static RadioGroupModel loadRadioGroup(JSONObject json) {
-
-        RadioGroupModel group = null;
-        try {
-            String groupId = json.getString("id");
-            String groupName = json.getString("name");
-            Log.d(LOG_TAG, "Loading radio group: " + groupName);
-
-            group = new RadioGroupModel(groupId, groupName);
-
-            JSONArray list = json.getJSONArray("radios");
-
-            int count = list.length();
-            for (int i = 0; i < count; i++) {
-                JSONObject element = list.getJSONObject(i);
-                String id = element.getString("id");
-                String name = element.getString("name");
-                String url = element.getString("url");
-
-                Log.v(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
-                group.addRadio(new RadioModel(id, name, url));
-            }
-
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
-        }
-
-        return group;
     }
 
     @Override
@@ -166,7 +129,7 @@ public class RadioFragment extends Fragment implements TabListener {
     private void initializePagerAdapter(View view) {
         Log.v(LOG_TAG, "Initializing pager adapter");
 
-        pagerAdapter = new RadioTabsPagerAdapter(((FragmentActivity) getActivity()).getSupportFragmentManager(), radioGroups);
+        pagerAdapter = new RadioTabsPagerAdapter(getActivity().getSupportFragmentManager(), radioGroups);
 
         // Adding Tabs
         actionBar.removeAllTabs();
@@ -240,6 +203,42 @@ public class RadioFragment extends Fragment implements TabListener {
         }
 
         return radios;
+    }
+
+    /**
+     * Load a radio group.
+     *
+     * @param json the JSON object containing the radio group definition
+     * @return the radio group
+     */
+    private static RadioGroupModel loadRadioGroup(JSONObject json) {
+
+        RadioGroupModel group = null;
+        try {
+            String groupId = json.getString("id");
+            String groupName = json.getString("name");
+            Log.d(LOG_TAG, "Loading radio group: " + groupName);
+
+            group = new RadioGroupModel(groupId, groupName);
+
+            JSONArray list = json.getJSONArray("radios");
+
+            int count = list.length();
+            for (int i = 0; i < count; i++) {
+                JSONObject element = list.getJSONObject(i);
+                String id = element.getString("id");
+                String name = element.getString("name");
+                String url = element.getString("url");
+
+                Log.v(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
+                group.addRadio(new RadioModel(id, name, url));
+            }
+
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
+        }
+
+        return group;
     }
 
 

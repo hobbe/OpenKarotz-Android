@@ -29,12 +29,9 @@
 package com.github.hobbe.android.openkarotz.activity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentManager.OnBackStackChangedListener;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -42,7 +39,11 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -75,17 +76,8 @@ import com.github.hobbe.android.openkarotz.task.SoundControlAsyncTask;
 public class MainActivity extends FragmentActivity {
 
     @Override
-    public void onAttachFragment(Fragment fragment) {
-        super.onAttachFragment(fragment);
-
-        Log.d(LOG_TAG, "Fragment attached: " + fragment);
-        currentFragment = fragment;
-        updateDrawerSelection(fragment);
-    }
-
-    @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
         if (fragmentManager != null) {
             int count = fragmentManager.getBackStackEntryCount();
@@ -149,6 +141,7 @@ public class MainActivity extends FragmentActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the navigation drawer is open, hide action items related to the content view
         boolean drawerOpen = drawerLayout.isDrawerOpen(drawerList);
+        menu.findItem(R.id.action_sound_stop).setVisible(!drawerOpen);
         menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         menu.findItem(R.id.action_about).setVisible(!drawerOpen);
 
@@ -181,7 +174,7 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager != null) {
             fragmentManager.addOnBackStackChangedListener(new BackStackChangedListener());
         }
@@ -227,8 +220,7 @@ public class MainActivity extends FragmentActivity {
      * Disable fields.
      */
     private void disableFields() {
-        // drawerLayout.setEnabled(false);
-        drawerList.setEnabled(false);
+        setFieldsEnabled(false);
     }
 
     private void doActionAbout() {
@@ -249,8 +241,7 @@ public class MainActivity extends FragmentActivity {
      * Enable fields.
      */
     private void enableFields() {
-        // drawerLayout.setEnabled(true);
-        drawerList.setEnabled(true);
+        setFieldsEnabled(true);
     }
 
     private Fragment getColorFragment() {
@@ -259,6 +250,7 @@ public class MainActivity extends FragmentActivity {
 
             Bundle args = new Bundle();
             args.putInt(ARG_PAGE_NUMBER, PAGE_COLOR);
+            args.putString(ARG_PAGE_TITLE, pageTitles[PAGE_COLOR]);
             colorFragment.setArguments(args);
         }
         return colorFragment;
@@ -270,6 +262,7 @@ public class MainActivity extends FragmentActivity {
 
             Bundle args = new Bundle();
             args.putInt(ARG_PAGE_NUMBER, PAGE_EARS);
+            args.putString(ARG_PAGE_TITLE, pageTitles[PAGE_EARS]);
             earsFragment.setArguments(args);
         }
         return earsFragment;
@@ -281,6 +274,7 @@ public class MainActivity extends FragmentActivity {
 
             Bundle args = new Bundle();
             args.putInt(ARG_PAGE_NUMBER, PAGE_HOME);
+            args.putString(ARG_PAGE_TITLE, pageTitles[PAGE_HOME]);
             homeFragment.setArguments(args);
         }
         return homeFragment;
@@ -301,6 +295,7 @@ public class MainActivity extends FragmentActivity {
 
             Bundle args = new Bundle();
             args.putInt(ARG_PAGE_NUMBER, PAGE_RADIO);
+            args.putString(ARG_PAGE_TITLE, pageTitles[PAGE_RADIO]);
             radioFragment.setArguments(args);
         }
         return radioFragment;
@@ -312,6 +307,7 @@ public class MainActivity extends FragmentActivity {
 
             Bundle args = new Bundle();
             args.putInt(ARG_PAGE_NUMBER, PAGE_SYSTEM);
+            args.putString(ARG_PAGE_TITLE, pageTitles[PAGE_SYSTEM]);
             systemFragment.setArguments(args);
         }
         return systemFragment;
@@ -325,6 +321,17 @@ public class MainActivity extends FragmentActivity {
             Log.e(LOG_TAG, "Cannot version.name from package manager: " + e.getMessage(), e);
         }
         return versionName;
+    }
+
+    private Fragment getVisibleFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<android.support.v4.app.Fragment> fragments = fragmentManager.getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment.isVisible()) {
+                return fragment;
+            }
+        }
+        return null;
     }
 
     private void initializeActionBar() {
@@ -362,8 +369,6 @@ public class MainActivity extends FragmentActivity {
         menuIcons.recycle();
 
         // Creating the adapter to add items to the drawer list view
-        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(getBaseContext(), R.layout.drawer_list_item,
-        // getResources().getStringArray(R.array.pages));
         DrawerListAdapter adapter = new DrawerListAdapter(getApplicationContext(), drawerItems);
 
         // Setting the adapter on drawerList
@@ -390,9 +395,9 @@ public class MainActivity extends FragmentActivity {
         // Create a new fragment based on position
         Fragment fragment = null;
         boolean allowBack = false;
-        String tag = String.valueOf(position);
+        String tag = pageTitles[position];
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         fragment = fragmentManager.findFragmentByTag(tag);
 
@@ -436,7 +441,7 @@ public class MainActivity extends FragmentActivity {
         }
 
         // Insert the fragment by replacing any existing fragment
-        transaction.replace(R.id.content_frame, fragment, String.valueOf(position));
+        transaction.replace(R.id.content_frame, fragment, tag);
 
         // Add transaction to back stack
         if (allowBack) {
@@ -451,6 +456,10 @@ public class MainActivity extends FragmentActivity {
 
         // Close the drawer
         drawerLayout.closeDrawer(drawerList);
+    }
+
+    private void setFieldsEnabled(boolean enabled) {
+        drawerList.setEnabled(enabled);
     }
 
     private void updateDrawerSelection(Fragment fragment) {
@@ -473,12 +482,9 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onBackStackChanged() {
-            Log.d(LOG_TAG, "Back stack changed!");
-            FragmentManager manager = getFragmentManager();
-
+            FragmentManager manager = getSupportFragmentManager();
             if (manager != null) {
-                // Fragment f = (Fragment) manager.findFragmentById(R.id.fragmentItem);
-                // f.onFragmentResume();
+                updateDrawerSelection(getVisibleFragment());
             }
         }
     }
@@ -561,7 +567,6 @@ public class MainActivity extends FragmentActivity {
     private ListView drawerList = null;
     private ActionBarDrawerToggle drawerToggle = null;
 
-    private Fragment currentFragment = null;
     private Fragment homeFragment;
     private Fragment radioFragment;
     private Fragment colorFragment;
@@ -575,6 +580,11 @@ public class MainActivity extends FragmentActivity {
      * Page number argument.
      */
     public static final String ARG_PAGE_NUMBER = "position";
+
+    /**
+     * Page title argument.
+     */
+    public static final String ARG_PAGE_TITLE = "title";
 
     // Drawer pages
     private static final int PAGE_HOME = 0;

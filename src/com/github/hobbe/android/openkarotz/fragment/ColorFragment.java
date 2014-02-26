@@ -37,11 +37,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -73,20 +73,6 @@ public class ColorFragment extends Fragment {
      */
     public ColorFragment() {
         // Nothing to initialize
-    }
-
-    private static int darker(final int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.8f;
-        return Color.HSVToColor(hsv);
-    }
-
-    private static int lighter(final int color) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = 1.0f - 0.5f * (1.0f - hsv[2]);
-        return Color.HSVToColor(hsv);
     }
 
     @Override
@@ -235,6 +221,20 @@ public class ColorFragment extends Fragment {
         for (Button button : buttonMap.values()) {
             button.setEnabled(enable);
         }
+    }
+
+    private static int darker(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= 0.8f;
+        return Color.HSVToColor(hsv);
+    }
+
+    private static int lighter(final int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = 1.0f - 0.5f * (1.0f - hsv[2]);
+        return Color.HSVToColor(hsv);
     }
 
 
