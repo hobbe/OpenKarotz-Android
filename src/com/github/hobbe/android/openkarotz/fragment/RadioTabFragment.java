@@ -67,7 +67,6 @@ public class RadioTabFragment extends Fragment {
 
     /**
      * Create a new instance of a radio list fragment for the given group of radio stations.
-     * 
      * @param group the group of radio stations
      * @return a new fragment
      */
@@ -92,6 +91,12 @@ public class RadioTabFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.d(LOG_TAG, "Fragment attached: " + (group == null ? "no group" : group.getName()));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.tab_radio, container, false);
@@ -101,6 +106,18 @@ public class RadioTabFragment extends Fragment {
         initializeView(view);
 
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d(LOG_TAG, "Fragment destroyed: " + (group == null ? "no group" : group.getName()));
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.d(LOG_TAG, "Fragment detached: " + (group == null ? "no group" : group.getName()));
     }
 
     private void disableFields() {

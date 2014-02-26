@@ -63,6 +63,41 @@ public class RadioFragment extends Fragment implements TabListener {
         // Nothing to initialize
     }
 
+    /**
+     * Load a radio group.
+     * @param json the JSON object containing the radio group definition
+     * @return the radio group
+     */
+    private static RadioGroupModel loadRadioGroup(JSONObject json) {
+
+        RadioGroupModel group = null;
+        try {
+            String groupId = json.getString("id");
+            String groupName = json.getString("name");
+            Log.d(LOG_TAG, "Loading radio group: " + groupName);
+
+            group = new RadioGroupModel(groupId, groupName);
+
+            JSONArray list = json.getJSONArray("radios");
+
+            int count = list.length();
+            for (int i = 0; i < count; i++) {
+                JSONObject element = list.getJSONObject(i);
+                String id = element.getString("id");
+                String name = element.getString("name");
+                String url = element.getString("url");
+
+                // Log.v(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
+                group.addRadio(new RadioModel(id, name, url));
+            }
+
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
+        }
+
+        return group;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreate, bundle: " + savedInstanceState);
@@ -98,14 +133,12 @@ public class RadioFragment extends Fragment implements TabListener {
 
     @Override
     public void onPause() {
-        Log.v(LOG_TAG, "onPause");
         super.onPause();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
     }
 
     @Override
     public void onResume() {
-        Log.v(LOG_TAG, "onResume");
         super.onResume();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
     }
@@ -171,6 +204,7 @@ public class RadioFragment extends Fragment implements TabListener {
             @Override
             public void onPageSelected(int position) {
                 actionBar.setSelectedNavigationItem(position);
+                viewPager.setCurrentItem(position);
             }
         });
     }
@@ -203,42 +237,6 @@ public class RadioFragment extends Fragment implements TabListener {
         }
 
         return radios;
-    }
-
-    /**
-     * Load a radio group.
-     *
-     * @param json the JSON object containing the radio group definition
-     * @return the radio group
-     */
-    private static RadioGroupModel loadRadioGroup(JSONObject json) {
-
-        RadioGroupModel group = null;
-        try {
-            String groupId = json.getString("id");
-            String groupName = json.getString("name");
-            Log.d(LOG_TAG, "Loading radio group: " + groupName);
-
-            group = new RadioGroupModel(groupId, groupName);
-
-            JSONArray list = json.getJSONArray("radios");
-
-            int count = list.length();
-            for (int i = 0; i < count; i++) {
-                JSONObject element = list.getJSONObject(i);
-                String id = element.getString("id");
-                String name = element.getString("name");
-                String url = element.getString("url");
-
-                Log.v(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
-                group.addRadio(new RadioModel(id, name, url));
-            }
-
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
-        }
-
-        return group;
     }
 
 
