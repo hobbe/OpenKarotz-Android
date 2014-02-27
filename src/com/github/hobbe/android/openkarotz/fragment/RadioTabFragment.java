@@ -70,6 +70,7 @@ public class RadioTabFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState == null) {
+            disableFields();
             new GetStatusTask(getActivity()).execute();
         }
     }

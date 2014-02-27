@@ -90,6 +90,18 @@ public class SystemFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        onOffSwitch.setOnCheckedChangeListener(null);
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onOffSwitch.setOnCheckedChangeListener(onOffSwitchCheckedChangeListener);
+    }
+
     private void initializeOnOffSwitch(View view) {
         onOffSwitch = (Switch) view.findViewById(R.id.switchOnOff);
         onOffSwitchCheckedChangeListener = new OnOffSwitchCheckedChangeListener();

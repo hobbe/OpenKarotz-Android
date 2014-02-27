@@ -71,6 +71,7 @@ public class EarsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState == null) {
+            disableFields();
             new GetStatusTask(getActivity()).execute();
             new GetEarModeTask(getActivity()).execute();
         }
@@ -286,12 +287,6 @@ public class EarsFragment extends Fragment {
             super(activity, position, position);
         }
 
-        @Override
-        public void onPostExecute(Object result) {
-            super.onPostExecute(result);
-
-            // TODO: Nothing to do?
-        }
     }
 
 

@@ -199,20 +199,22 @@ public class MainActivity extends FragmentActivity {
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
 
-        // Disable all fields
-        disableFields();
+        if (savedInstanceState == null) {
+            // Disable all fields
+            disableFields();
 
-        // Check network connection
-        if (NetUtils.isNetworkConnectionAvailable(this)) {
+            // Check network connection
+            if (NetUtils.isNetworkConnectionAvailable(this)) {
 
-            // Set up Karotz instance
-            initializeKarotz();
+                // Set up Karotz instance
+                initializeKarotz();
 
-            GetStatusTask task = new GetStatusTask(this);
-            task.execute();
+                GetStatusTask task = new GetStatusTask(this);
+                task.execute();
 
-        } else {
-            Toast.makeText(MainActivity.this, getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(MainActivity.this, getString(R.string.err_no_connection), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -505,7 +507,6 @@ public class MainActivity extends FragmentActivity {
 
         /**
          * Create the drawer toggle.
-         *
          * @param activity the associated activity
          * @param layout the drawer layout
          * @param imageRes the drawer image

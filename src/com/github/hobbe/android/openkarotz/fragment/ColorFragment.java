@@ -81,6 +81,7 @@ public class ColorFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState == null) {
+            disableFields();
             new GetStatusTask(getActivity()).execute();
         }
     }
