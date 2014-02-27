@@ -327,7 +327,9 @@ public class ColorFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             if (result != null) {
                 // TODO: update color selection
             }
@@ -341,7 +343,9 @@ public class ColorFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             boolean pulsing = ((Boolean) result).booleanValue();
             if (pulsing) {
                 // Check switch, without triggering listener
@@ -359,7 +363,9 @@ public class ColorFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             KarotzStatus status = (KarotzStatus) result;
             boolean awake = (status != null && status.isAwake());
             if (awake) {

@@ -65,22 +65,6 @@ public class RadioTabFragment extends Fragment {
         // Nothing to do
     }
 
-    /**
-     * Create a new instance of a radio list fragment for the given group of radio stations.
-     * @param group the group of radio stations
-     * @return a new fragment
-     */
-    public static RadioTabFragment newInstance(RadioGroupModel group) {
-        RadioTabFragment fragment = new RadioTabFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(RadioTabFragment.KEY_GROUP, group);
-
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -169,6 +153,22 @@ public class RadioTabFragment extends Fragment {
         }
     }
 
+    /**
+     * Create a new instance of a radio list fragment for the given group of radio stations.
+     * @param group the group of radio stations
+     * @return a new fragment
+     */
+    public static RadioTabFragment newInstance(RadioGroupModel group) {
+        RadioTabFragment fragment = new RadioTabFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(RadioTabFragment.KEY_GROUP, group);
+
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
 
     private class GetStatusTask extends GetStatusAsyncTask {
 
@@ -177,7 +177,9 @@ public class RadioTabFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             KarotzStatus status = (KarotzStatus) result;
             boolean awake = (status != null && status.isAwake());
             if (awake) {
@@ -196,7 +198,9 @@ public class RadioTabFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             Toast.makeText(getActivity(), getString(R.string.radio_starting) + " " + name, Toast.LENGTH_SHORT).show();
         }
 

@@ -181,7 +181,9 @@ public class EarsFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             EarMode newMode = (EarMode) result;
             if (newMode != null) {
                 // Check switch, without triggering listener
@@ -213,8 +215,8 @@ public class EarsFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
-            super.postExecute(result);
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
 
             if (result != null) {
                 EarPosition[] positions = (EarPosition[]) result;
@@ -233,8 +235,8 @@ public class EarsFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
-            super.postExecute(result);
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
 
             earsKnob.setAngle(0f);
         }
@@ -247,7 +249,9 @@ public class EarsFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             EarMode earMode = (EarMode) result;
             if (earMode != null) {
                 earsDisabledSwitch.setChecked(earMode.isDisabled());
@@ -262,7 +266,9 @@ public class EarsFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             KarotzStatus status = (KarotzStatus) result;
             boolean awake = (status != null && status.isAwake());
             if (awake) {
@@ -281,7 +287,9 @@ public class EarsFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             // TODO: Nothing to do?
         }
     }

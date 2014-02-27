@@ -43,7 +43,7 @@ public class GetStatusAsyncTask extends KarotzAsyncTask {
 
     /**
      * Initialize a new task.
-     * 
+     *
      * @param activity the calling activity
      */
     public GetStatusAsyncTask(Activity activity) {
@@ -56,12 +56,14 @@ public class GetStatusAsyncTask extends KarotzAsyncTask {
     @Override
     protected KarotzStatus doInBackground(Object... params) {
 
-        try {
-            return Karotz.getInstance().getStatus();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Cannot get Karotz status: " + e.getMessage(), e);
-            return KarotzStatus.UNKNOWN;
+        if (!isCancelled()) {
+            try {
+                return Karotz.getInstance().getStatus();
+            } catch (IOException e) {
+                Log.e(LOG_TAG, "Cannot get Karotz status: " + e.getMessage(), e);
+            }
         }
+        return KarotzStatus.UNKNOWN;
     }
 
 

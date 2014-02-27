@@ -30,6 +30,7 @@ package com.github.hobbe.android.openkarotz.task;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -37,8 +38,10 @@ import com.github.hobbe.android.openkarotz.R;
 
 /**
  * This {@link AsyncTask asynchronous task} is equipped with a {@link ProgressDialog progress dialog} during
- * communication with the Karotz. It is triggered on pre-execution step and dismissed on post-execution step. Developers
- * can override {@link #preExecute()} and {@link #postExecute(Object)} to add custom code during those steps.
+ * communication with the Karotz. It is triggered on pre-execution step and dismissed on post-execution step.
+ * <p>Developers can override {@link #onPreExecute()} and {@link #onPostExecute(Object)} to add custom code
+ * during those steps.
+ * <p>Developers can override {@link #onDialogCancelled()} to handle cancellation of progress dialog.
  */
 public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> {
 
@@ -61,36 +64,44 @@ public abstract class KarotzAsyncTask extends AsyncTask<Object, Object, Object> 
     }
 
     /**
-     * Custom code that is executed after the task finishes, in the post-execution step.
-     *
-     * @param result the task result
+     * Runs on the UI thread when progress dialog is cancelled.
      */
-    public void postExecute(Object result) {
-        // Empty implementation
-    }
-
-    /**
-     * Custom code that is executed before the task runs, in the pre-execution step.
-     */
-    public void preExecute() {
+    protected void onDialogCancelled() {
         // Empty implementation
     }
 
     @Override
     protected void onPostExecute(Object result) {
         pd.dismiss();
-        pd = null;
         Log.v(LOG_TAG, "Progress dialog dismissed");
-
-        postExecute(result);
     }
 
     @Override
     protected void onPreExecute() {
         Log.v(LOG_TAG, "Showing progress dialog...");
-        pd = ProgressDialog.show(activity, activity.getString(R.string.progress_karotz_title), activity.getString(R.string.progress_karotz_description));
 
-        preExecute();
+        // pd = ProgressDialog.show(activity, activity.getString(R.string.progress_karotz_title),
+        // activity.getString(R.string.progress_karotz_description));
+        pd = new ProgressDialog(activity);
+        pd.setTitle(activity.getString(R.string.progress_karotz_title));
+        pd.setMessage(activity.getString(R.string.progress_karotz_description));
+        pd.setCancelable(true);
+
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                pd.dismiss();
+                Log.v(LOG_TAG, "Progress dialog dismissed by user");
+
+                KarotzAsyncTask.this.cancel(true);
+                Log.d(LOG_TAG, "Task cancelled by user");
+
+                onDialogCancelled();
+            }
+        });
+
+        pd.show();
     }
 
 

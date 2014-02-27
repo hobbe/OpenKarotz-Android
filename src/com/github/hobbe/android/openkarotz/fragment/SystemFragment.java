@@ -117,7 +117,9 @@ public class SystemFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             KarotzStatus status = (KarotzStatus) result;
             onOffSwitch.setChecked(status != null && status.isAwake());
         }
@@ -130,7 +132,9 @@ public class SystemFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             if (result == null) {
                 Toast.makeText(SystemFragment.this.getActivity(), getString(R.string.err_cannot_getversion), Toast.LENGTH_SHORT).show();
             } else {
@@ -164,7 +168,9 @@ public class SystemFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             if (Boolean.FALSE.equals(result)) {
                 Toast.makeText(SystemFragment.this.getActivity(), getString(R.string.err_cannot_sleep), Toast.LENGTH_SHORT).show();
 
@@ -183,7 +189,9 @@ public class SystemFragment extends Fragment {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             if (Boolean.FALSE.equals(result)) {
                 Toast.makeText(SystemFragment.this.getActivity(), getString(R.string.err_cannot_wakeup), Toast.LENGTH_SHORT).show();
 

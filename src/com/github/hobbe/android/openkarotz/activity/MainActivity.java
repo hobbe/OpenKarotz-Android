@@ -185,9 +185,6 @@ public class MainActivity extends FragmentActivity {
         initializeDrawer();
         initializeActionBar();
 
-        // Disable all fields
-        disableFields();
-
         if (savedInstanceState == null) {
             // Select first page (Home)
             selectDrawerItem(0);
@@ -201,6 +198,9 @@ public class MainActivity extends FragmentActivity {
 
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
+
+        // Disable all fields
+        disableFields();
 
         // Check network connection
         if (NetUtils.isNetworkConnectionAvailable(this)) {
@@ -544,7 +544,9 @@ public class MainActivity extends FragmentActivity {
         }
 
         @Override
-        public void postExecute(Object result) {
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
             KarotzStatus status = (KarotzStatus) result;
 
             // Check Karotz status
