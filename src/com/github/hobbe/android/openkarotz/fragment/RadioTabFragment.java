@@ -73,12 +73,20 @@ public class RadioTabFragment extends Fragment {
             disableFields();
             new GetStatusTask(getActivity()).execute();
         }
+
+        Log.v(LOG_TAG, "onActivityCreated: " + (group == null ? "no group" : group.getName()));
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.d(LOG_TAG, "Fragment attached: " + (group == null ? "no group" : group.getName()));
+        Log.v(LOG_TAG, "onAttach: " + (group == null ? "no group" : group.getName()));
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.v(LOG_TAG, "onCreate: " + (group == null ? "no group" : group.getName()));
     }
 
     @Override
@@ -86,40 +94,86 @@ public class RadioTabFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.tab_radio, container, false);
 
-        this.group = (RadioGroupModel) getArguments().getSerializable(KEY_GROUP);
+        if (savedInstanceState == null) {
+            this.group = (RadioGroupModel) getArguments().getSerializable(KEY_GROUP);
+        } else {
+            this.group = (RadioGroupModel) savedInstanceState.getSerializable(KEY_GROUP);
+        }
 
         initializeView(view);
 
+        Log.v(LOG_TAG, "onCreateView: " + (group == null ? "no group" : group.getName()));
         return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "Fragment destroyed: " + (group == null ? "no group" : group.getName()));
+        Log.v(LOG_TAG, "onDestroy: " + (group == null ? "no group" : group.getName()));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.v(LOG_TAG, "onDestroyView: " + (group == null ? "no group" : group.getName()));
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.d(LOG_TAG, "Fragment detached: " + (group == null ? "no group" : group.getName()));
+        Log.v(LOG_TAG, "onDetach: " + (group == null ? "no group" : group.getName()));
     }
 
-    private void disableFields() {
-        setEnableFields(false);
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.v(LOG_TAG, "onPause: " + (group == null ? "no group" : group.getName()));
     }
 
-    private void enableFields() {
-        setEnableFields(true);
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.v(LOG_TAG, "onResume: " + (group == null ? "no group" : group.getName()));
+
+        // addButtonsToLayout();
     }
 
-    private void initializeRadioLayout(View view) {
-        if (group == null) {
-            return;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.v(LOG_TAG, "onSaveInstanceState: " + (group == null ? "no group" : group.getName()));
+        outState.putSerializable(RadioTabFragment.KEY_GROUP, group);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.v(LOG_TAG, "onStart: " + (group == null ? "no group" : group.getName()));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v(LOG_TAG, "onStop: " + (group == null ? "no group" : group.getName()));
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.v(LOG_TAG, "onViewCreated: " + (group == null ? "no group" : group.getName()));
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            this.group = (RadioGroupModel) savedInstanceState.getSerializable(KEY_GROUP);
         }
+    }
 
-        radioLayout = (FlowLayout) view.findViewById(R.id.layoutRadios);
-
+    private void addButtonsToLayout() {
+        Log.d(LOG_TAG, "Adding buttons to radio layout: " + (group == null ? "no group" : group.getName()));
         buttonMap.clear();
 
         for (RadioModel radio : group.getRadios()) {
@@ -143,6 +197,25 @@ public class RadioTabFragment extends Fragment {
         }
     }
 
+    private void disableFields() {
+        setEnableFields(false);
+    }
+
+    private void enableFields() {
+        setEnableFields(true);
+    }
+
+    private void initializeRadioLayout(View view) {
+        Log.d(LOG_TAG, "Initializing radio layout for group " + (group == null ? "no group" : group.getName()));
+        if (group == null) {
+            return;
+        }
+
+        radioLayout = (FlowLayout) view.findViewById(R.id.layoutRadios);
+
+        addButtonsToLayout();
+    }
+
     private void initializeView(View view) {
         // Radio button layout
         initializeRadioLayout(view);
@@ -160,6 +233,8 @@ public class RadioTabFragment extends Fragment {
      * @return a new fragment
      */
     public static RadioTabFragment newInstance(RadioGroupModel group) {
+        Log.d(LOG_TAG, "New instance of radio tab fragment for group " + group.getName());
+
         RadioTabFragment fragment = new RadioTabFragment();
 
         Bundle bundle = new Bundle();

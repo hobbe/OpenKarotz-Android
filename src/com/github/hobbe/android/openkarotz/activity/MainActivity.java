@@ -83,14 +83,15 @@ public class MainActivity extends FragmentActivity {
             int count = fragmentManager.getBackStackEntryCount();
 
             // Any going back?
-            if (count > 0) {
+            if (count > 1) {
                 fragmentManager.popBackStack();
                 return;
             }
         }
 
         // Else default handling
-        super.onBackPressed();
+        // super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -408,6 +409,7 @@ public class MainActivity extends FragmentActivity {
             if (fragment == null) {
                 fragment = getHomeFragment();
             }
+            allowBack = true;
             break;
 
         case PAGE_RADIO:
@@ -465,10 +467,12 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void updateDrawerSelection(Fragment fragment) {
-        // Fetch the selected page number
-        int position = fragment.getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
+        if (fragment != null) {
+            // Fetch the selected page number
+            int position = fragment.getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
 
-        updateDrawerSelection(position);
+            updateDrawerSelection(position);
+        }
     }
 
     private void updateDrawerSelection(int position) {

@@ -33,9 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.ActionBar.TabListener;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -54,7 +51,7 @@ import com.github.hobbe.android.openkarotz.util.AssetUtils;
 /**
  * Radio fragment.
  */
-public class RadioFragment extends Fragment implements TabListener {
+public class RadioFragment extends Fragment {
 
     /**
      * Initialize a new radio fragment.
@@ -64,38 +61,11 @@ public class RadioFragment extends Fragment implements TabListener {
     }
 
     /**
-     * Load a radio group.
-     * @param json the JSON object containing the radio group definition
-     * @return the radio group
+     * Get the pager adapter.
+     * @return the pager adapter
      */
-    private static RadioGroupModel loadRadioGroup(JSONObject json) {
-
-        RadioGroupModel group = null;
-        try {
-            String groupId = json.getString("id");
-            String groupName = json.getString("name");
-            Log.d(LOG_TAG, "Loading radio group: " + groupName);
-
-            group = new RadioGroupModel(groupId, groupName);
-
-            JSONArray list = json.getJSONArray("radios");
-
-            int count = list.length();
-            for (int i = 0; i < count; i++) {
-                JSONObject element = list.getJSONObject(i);
-                String id = element.getString("id");
-                String name = element.getString("name");
-                String url = element.getString("url");
-
-                // Log.v(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
-                group.addRadio(new RadioModel(id, name, url));
-            }
-
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
-        }
-
-        return group;
+    public RadioTabsPagerAdapter getPagerAdapter() {
+        return pagerAdapter;
     }
 
     @Override
@@ -141,72 +111,23 @@ public class RadioFragment extends Fragment implements TabListener {
     public void onResume() {
         super.onResume();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-    }
-
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        // Nothing to do
-    }
-
-    @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        Log.v(LOG_TAG, "onTabSelected position #" + tab.getPosition());
-        viewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        // Nothing to do
-    }
-
-    private void initializePagerAdapter(View view) {
-        Log.v(LOG_TAG, "Initializing pager adapter");
-
-        pagerAdapter = new RadioTabsPagerAdapter(getActivity().getSupportFragmentManager(), radioGroups);
-
-        // Adding Tabs
-        actionBar.removeAllTabs();
-        for (RadioGroupModel group : radioGroups) {
-            actionBar.addTab(actionBar.newTab().setText(group.getName()).setTabListener(this));
-        }
+        // viewPager.setCurrentItem(0);
     }
 
     private void initializeView(View view) {
         Log.v(LOG_TAG, "Initializing radio fragment view");
 
         // View pager
-        initializeViewPager(view);
-
-        // Pager adapter
-        initializePagerAdapter(view);
-
-        // Associate viewer and adapter
-        viewPager.setAdapter(pagerAdapter);
-    }
-
-    private void initializeViewPager(View view) {
         Log.v(LOG_TAG, "Initializing view pager");
-
         viewPager = (ViewPager) view.findViewById(R.id.pagerRadio);
 
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        // Clean up current action bar
+        actionBar.removeAllTabs();
 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-                // Nothing to do
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-                // Nothing to do
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-                viewPager.setCurrentItem(position);
-            }
-        });
+        // Pager adapter
+        Log.v(LOG_TAG, "Initializing pager adapter");
+        // pagerAdapter = new RadioTabsPagerAdapter(getActivity().getSupportFragmentManager(), radioGroups);
+        pagerAdapter = new RadioTabsPagerAdapter(getActivity(), viewPager, radioGroups);
     }
 
     private RadioGroupModel[] loadRadios() {
@@ -237,6 +158,41 @@ public class RadioFragment extends Fragment implements TabListener {
         }
 
         return radios;
+    }
+
+    /**
+     * Load a radio group.
+     * @param json the JSON object containing the radio group definition
+     * @return the radio group
+     */
+    private static RadioGroupModel loadRadioGroup(JSONObject json) {
+
+        RadioGroupModel group = null;
+        try {
+            String groupId = json.getString("id");
+            String groupName = json.getString("name");
+            Log.d(LOG_TAG, "Loading radio group: " + groupName);
+
+            group = new RadioGroupModel(groupId, groupName);
+
+            JSONArray list = json.getJSONArray("radios");
+
+            int count = list.length();
+            for (int i = 0; i < count; i++) {
+                JSONObject element = list.getJSONObject(i);
+                String id = element.getString("id");
+                String name = element.getString("name");
+                String url = element.getString("url");
+
+                // Log.v(LOG_TAG, "Adding radio " + name + " to group " + group.getName());
+                group.addRadio(new RadioModel(id, name, url));
+            }
+
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Could not parse JSON content: " + e.getMessage(), e);
+        }
+
+        return group;
     }
 
 
