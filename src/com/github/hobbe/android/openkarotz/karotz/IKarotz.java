@@ -82,6 +82,13 @@ public interface IKarotz {
     EarMode getEarMode() throws IOException;
 
     /**
+     * Get the Karotz ear positions.
+     * @return the ear positions in an array of 2 elements, left ear at index 0, right ear at index 1
+     * @throws IOException if an I/O error occurs
+     */
+    EarPosition[] getEarPositions() throws IOException;
+
+    /**
      * Get the Karotz hostname.
      * @return the hostname
      */
@@ -236,6 +243,27 @@ public interface IKarotz {
         }
 
         /**
+         * Get the position value.
+         * @return the position value
+         */
+        public byte getPosition() {
+            return position;
+        }
+
+        /**
+         * Get the angle corresponding to the ear position.
+         * @return the angle, 0 to 360°
+         */
+        public int toAngle() {
+            return Math.round(position * 360.0f / 16.0f);
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(position);
+        }
+
+        /**
          * Get the ear position corresponding to the given angle.
          * @param angle an angle, 0 to 360°; values above will be modded with 360
          * @return the ear position corresponding to the angle
@@ -288,27 +316,6 @@ public interface IKarotz {
             default:
                 return EarPosition.POSITION_1;
             }
-        }
-
-        /**
-         * Get the position value.
-         * @return the position value
-         */
-        public byte getPosition() {
-            return position;
-        }
-
-        /**
-         * Get the angle corresponding to the ear position.
-         * @return the angle, 0 to 360°
-         */
-        public int toAngle() {
-            return Math.round(position * 360.0f / 16.0f);
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(position);
         }
 
 

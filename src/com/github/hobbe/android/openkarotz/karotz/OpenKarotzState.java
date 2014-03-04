@@ -35,6 +35,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarMode;
+import com.github.hobbe.android.openkarotz.karotz.IKarotz.EarPosition;
 import com.github.hobbe.android.openkarotz.karotz.IKarotz.KarotzStatus;
 
 /**
@@ -95,6 +96,22 @@ public class OpenKarotzState {
     }
 
     /**
+     * Get the left ear position.
+     * @return the left ear position
+     */
+    public EarPosition getLeftEarPosition() {
+        return leftEarPosition;
+    }
+
+    /**
+     * Get the right ear position.
+     * @return the right ear position
+     */
+    public EarPosition getRightEarPosition() {
+        return rightEarPosition;
+    }
+
+    /**
      * Get the status.
      *
      * @return the status
@@ -140,12 +157,28 @@ public class OpenKarotzState {
     }
 
     /**
+     * Set the left ear position.
+     * @param position the left ear position to set
+     */
+    public void setLeftEarPosition(EarPosition position) {
+        this.leftEarPosition = position;
+    }
+
+    /**
      * Set the LED pulsing state.
      *
      * @param pulsing the pulsing state to set
      */
     public void setPulsing(boolean pulsing) {
         this.pulsing = pulsing;
+    }
+
+    /**
+     * Set the right ear position.
+     * @param position the right ear position to set
+     */
+    public void setRightEarPosition(EarPosition position) {
+        this.rightEarPosition = position;
     }
 
     /**
@@ -170,6 +203,10 @@ public class OpenKarotzState {
         sb.append(pulsing ? "1" : "0");
         sb.append("\", \"ears_disabled\": \"");
         sb.append(earMode.isDisabled() ? "1" : "0");
+        sb.append("\", \"left_ear\": \"");
+        sb.append(leftEarPosition.toString());
+        sb.append("\", \"right_ear\": \"");
+        sb.append(rightEarPosition.toString());
         sb.append("\" }");
         return sb.toString();
     }
@@ -180,10 +217,11 @@ public class OpenKarotzState {
     private KarotzStatus status = KarotzStatus.UNKNOWN;
 
     private int ledColor = Color.GREEN;
-
     private boolean pulsing = true;
 
     private EarMode earMode = EarMode.ENABLED;
+    private EarPosition leftEarPosition = EarPosition.POSITION_1;
+    private EarPosition rightEarPosition = EarPosition.POSITION_1;
 
     private static final String KEY_VERSION = "version";
 

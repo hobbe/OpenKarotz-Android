@@ -60,19 +60,20 @@ public class OpenKarotz implements IKarotz {
         }
     }
 
-    private static String toColorCode(int c) {
-        String cc = Integer.toHexString(c);
-        while (cc.length() < 6) {
-            cc = '0' + cc;
-        }
-        return cc;
-    }
-
     @Override
     public EarPosition[] ears(EarPosition left, EarPosition right) throws IOException {
+
+        // Default position
         EarPosition[] newPositions = new EarPosition[] {
                 EarPosition.POSITION_1, EarPosition.POSITION_1
         };
+
+        // Current position, if available
+        if (state != null) {
+            newPositions = new EarPosition[] {
+                    state.getLeftEarPosition(), state.getRightEarPosition()
+            };
+        }
 
         URL url = new URL(api, CGI_BIN + "/ears?noreset=1&left=" + left.toString() + "&right=" + right.toString());
         Log.d(LOG_TAG, url.toString());
@@ -91,6 +92,11 @@ public class OpenKarotz implements IKarotz {
             }
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Cannot move Karotz ears: " + e.getMessage(), e);
+        }
+
+        if (state != null) {
+            state.setLeftEarPosition(newPositions[0]);
+            state.setRightEarPosition(newPositions[1]);
         }
 
         return newPositions;
@@ -130,9 +136,18 @@ public class OpenKarotz implements IKarotz {
 
     @Override
     public EarPosition[] earsRandom() throws IOException {
+
+        // Default position
         EarPosition[] newPositions = new EarPosition[] {
                 EarPosition.POSITION_1, EarPosition.POSITION_1
         };
+
+        // Current position, if available
+        if (state != null) {
+            newPositions = new EarPosition[] {
+                    state.getLeftEarPosition(), state.getRightEarPosition()
+            };
+        }
 
         URL url = new URL(api, CGI_BIN + "/ears_random");
         Log.d(LOG_TAG, url.toString());
@@ -155,6 +170,11 @@ public class OpenKarotz implements IKarotz {
             Log.e(LOG_TAG, "Cannot put Karotz ears in random position: " + e.getMessage(), e);
         }
 
+        if (state != null) {
+            state.setLeftEarPosition(newPositions[0]);
+            state.setRightEarPosition(newPositions[1]);
+        }
+
         return newPositions;
     }
 
@@ -174,6 +194,10 @@ public class OpenKarotz implements IKarotz {
             boolean ok = "0".equals(json.getString("return"));
 
             if (ok) {
+                if (state != null) {
+                    state.setLeftEarPosition(EarPosition.POSITION_1);
+                    state.setRightEarPosition(EarPosition.POSITION_1);
+                }
                 return;
             }
         } catch (JSONException e) {
@@ -196,6 +220,27 @@ public class OpenKarotz implements IKarotz {
             status();
         }
         return state.getEarMode();
+    }
+
+    @Override
+    public EarPosition[] getEarPositions() throws IOException {
+        if (isOffline()) {
+            // Re-check state
+            status();
+        }
+
+        // Default position
+        EarPosition[] positions = new EarPosition[] {
+                EarPosition.POSITION_1, EarPosition.POSITION_1
+        };
+
+        if (state != null) {
+            positions = new EarPosition[] {
+                    state.getLeftEarPosition(), state.getRightEarPosition()
+            };
+        }
+
+        return positions;
     }
 
     @Override
@@ -391,6 +436,14 @@ public class OpenKarotz implements IKarotz {
 
         state = new OpenKarotzState(result);
         Log.d(LOG_TAG, state.toString());
+    }
+
+    private static String toColorCode(int c) {
+        String cc = Integer.toHexString(c);
+        while (cc.length() < 6) {
+            cc = '0' + cc;
+        }
+        return cc;
     }
 
 

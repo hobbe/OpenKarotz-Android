@@ -50,6 +50,7 @@ import com.github.hobbe.android.openkarotz.task.EarsAsyncTask;
 import com.github.hobbe.android.openkarotz.task.EarsRandomAsyncTask;
 import com.github.hobbe.android.openkarotz.task.EarsResetAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetEarModeAsyncTask;
+import com.github.hobbe.android.openkarotz.task.GetEarPositionsAsyncTask;
 import com.github.hobbe.android.openkarotz.task.GetStatusAsyncTask;
 import com.github.hobbe.android.openkarotz.widget.RotaryKnob;
 import com.github.hobbe.android.openkarotz.widget.RotaryKnob.RotaryKnobListener;
@@ -74,6 +75,7 @@ public class EarsFragment extends Fragment {
             disableFields();
             new GetStatusTask(getActivity()).execute();
             new GetEarModeTask(getActivity()).execute();
+            new GetEarPositionsTask(getActivity()).execute();
         }
     }
 
@@ -239,6 +241,7 @@ public class EarsFragment extends Fragment {
         public void onPostExecute(Object result) {
             super.onPostExecute(result);
 
+            Log.v(LOG_TAG, "Resetting angle to 0°");
             earsKnob.setAngle(0f);
         }
     }
@@ -260,6 +263,26 @@ public class EarsFragment extends Fragment {
         }
     }
 
+    private class GetEarPositionsTask extends GetEarPositionsAsyncTask {
+
+        public GetEarPositionsTask(Activity activity) {
+            super(activity);
+        }
+
+        @Override
+        public void onPostExecute(Object result) {
+            super.onPostExecute(result);
+
+            EarPosition[] positions = (EarPosition[]) result;
+            if (positions != null) {
+                // Note: currently one one knob for both ears
+                int angle = positions[0].toAngle();
+                Log.v(LOG_TAG, "Setting angle to " + angle + "°");
+                earsKnob.setAngle(angle * 1.0f);
+            }
+        }
+    }
+
     private class GetStatusTask extends GetStatusAsyncTask {
 
         public GetStatusTask(Activity activity) {
@@ -271,6 +294,8 @@ public class EarsFragment extends Fragment {
             super.onPostExecute(result);
 
             KarotzStatus status = (KarotzStatus) result;
+
+            // Awake
             boolean awake = (status != null && status.isAwake());
             if (awake) {
                 enableFields();
