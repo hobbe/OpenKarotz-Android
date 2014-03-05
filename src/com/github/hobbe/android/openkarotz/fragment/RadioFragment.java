@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -69,16 +70,28 @@ public class RadioFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "onCreate, bundle: " + savedInstanceState);
-        super.onCreate(savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onActivityCreated");
+        super.onActivityCreated(savedInstanceState);
+    }
 
+    @Override
+    public void onAttach(Activity activity) {
+        Log.v(LOG_TAG, "onAttach");
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "onCreate");
         radioGroups = loadRadios();
+
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.v(LOG_TAG, "onCreateView, bundle: " + savedInstanceState);
+        Log.v(LOG_TAG, "onCreateView");
 
         // Fetch the selected page number
         int index = getArguments().getInt(MainActivity.ARG_PAGE_NUMBER);
@@ -98,20 +111,40 @@ public class RadioFragment extends Fragment {
 
         initializeView(view);
 
+        Log.v(LOG_TAG, "onCreateView ... done");
         return view;
     }
 
     @Override
+    public void onDestroy() {
+        Log.v(LOG_TAG, "onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        Log.v(LOG_TAG, "onDestroyView");
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.v(LOG_TAG, "onDetach");
+        super.onDetach();
+    }
+
+    @Override
     public void onPause() {
+        Log.v(LOG_TAG, "onPause");
         super.onPause();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
     }
 
     @Override
     public void onResume() {
+        Log.v(LOG_TAG, "onResume");
         super.onResume();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        // viewPager.setCurrentItem(0);
     }
 
     private void initializeView(View view) {
@@ -120,9 +153,6 @@ public class RadioFragment extends Fragment {
         // View pager
         Log.v(LOG_TAG, "Initializing view pager");
         viewPager = (ViewPager) view.findViewById(R.id.pagerRadio);
-
-        // Clean up current action bar
-        actionBar.removeAllTabs();
 
         // Pager adapter
         Log.v(LOG_TAG, "Initializing pager adapter");
@@ -146,7 +176,7 @@ public class RadioFragment extends Fragment {
                 JSONObject element = list.getJSONObject(i);
                 RadioGroupModel group = loadRadioGroup(element);
                 if (group != null) {
-                    Log.v(LOG_TAG, "Loaded radio group " + group.getName());
+                    Log.v(LOG_TAG, "Loaded radio group: " + group.getName());
                     radios[i] = group;
                 }
             }

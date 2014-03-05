@@ -37,6 +37,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import com.github.hobbe.android.openkarotz.fragment.RadioTabFragment;
 import com.github.hobbe.android.openkarotz.model.RadioGroupModel;
@@ -61,12 +62,24 @@ public class RadioTabsPagerAdapter extends FragmentPagerAdapter implements Actio
         this.viewPager.setAdapter(this);
         this.viewPager.setOnPageChangeListener(this);
 
+        this.fragments = new RadioTabFragment[groups.length];
         this.groups = groups;
+
+        // Clean up current action bar
+        actionBar.removeAllTabs();
 
         // Adding Tabs
         for (RadioGroupModel group : groups) {
             addTab(actionBar.newTab(), group);
         }
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        RadioTabFragment f = (RadioTabFragment) object;
+        f.getFragmentManager().beginTransaction().remove(f).commit();
+
+        super.destroyItem(container, position, object);
     }
 
     @Override
@@ -83,42 +96,42 @@ public class RadioTabsPagerAdapter extends FragmentPagerAdapter implements Actio
     }
 
     @Override
-    public Fragment getItem(int index) {
-        Log.v(LOG_TAG, "Getting fragment at index " + index);
-        RadioGroupModel group = groups[index];
+    public Fragment getItem(int position) {
+        Log.v(LOG_TAG, "Getting fragment at position " + position);
+        RadioGroupModel group = groups[position];
 
-        Log.v(LOG_TAG, "Creating fragment for group " + group.getName());
-        Fragment fragment = RadioTabFragment.newInstance(group);
+        RadioTabFragment fragment = fragments[position];
+        if (fragment == null) {
+            Log.v(LOG_TAG, "Creating fragment for group: " + group.getName());
+            fragment = RadioTabFragment.newInstance(group);
+            fragments[position] = fragment;
+        }
+
         return fragment;
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        Log.d(LOG_TAG, "onPageScrolled: " + position);
         // Nothing to do
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        Log.d(LOG_TAG, "onPageScrollStateChanged, new value: " + state);
         // Nothing to do
     }
 
     @Override
     public void onPageSelected(int position) {
-        Log.d(LOG_TAG, "onPageSelected: " + position);
         actionBar.setSelectedNavigationItem(position);
     }
 
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        Log.d(LOG_TAG, "onTabReselected: " + tab.getPosition());
         // Nothing to do
     }
 
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        Log.d(LOG_TAG, "onTabSelected: " + tab.getPosition());
         Object tag = tab.getTag();
         for (int i = 0; i < groups.length; i++) {
             if (groups[i] == tag) {
@@ -129,7 +142,6 @@ public class RadioTabsPagerAdapter extends FragmentPagerAdapter implements Actio
 
     @Override
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        Log.d(LOG_TAG, "onTabUnselected: " + tab.getPosition());
         // Nothing to do
     }
 
@@ -144,7 +156,11 @@ public class RadioTabsPagerAdapter extends FragmentPagerAdapter implements Actio
 
 
     private final ActionBar actionBar;
+
     private final ViewPager viewPager;
+
+    private final RadioTabFragment[] fragments;
+
     private final RadioGroupModel[] groups;
 
     private static final String LOG_TAG = RadioTabsPagerAdapter.class.getSimpleName();

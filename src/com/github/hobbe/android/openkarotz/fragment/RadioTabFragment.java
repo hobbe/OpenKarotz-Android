@@ -102,6 +102,8 @@ public class RadioTabFragment extends Fragment {
 
         initializeView(view);
 
+        disableFields();
+
         Log.v(LOG_TAG, "onCreateView: " + (group == null ? "no group" : group.getName()));
         return view;
     }
@@ -134,8 +136,6 @@ public class RadioTabFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.v(LOG_TAG, "onResume: " + (group == null ? "no group" : group.getName()));
-
-        // addButtonsToLayout();
     }
 
     @Override
@@ -173,7 +173,7 @@ public class RadioTabFragment extends Fragment {
     }
 
     private void addButtonsToLayout() {
-        Log.d(LOG_TAG, "Adding buttons to radio layout: " + (group == null ? "no group" : group.getName()));
+        Log.v(LOG_TAG, "Adding buttons to radio layout: " + (group == null ? "no group" : group.getName()));
         buttonMap.clear();
 
         for (RadioModel radio : group.getRadios()) {
@@ -206,7 +206,7 @@ public class RadioTabFragment extends Fragment {
     }
 
     private void initializeRadioLayout(View view) {
-        Log.d(LOG_TAG, "Initializing radio layout for group " + (group == null ? "no group" : group.getName()));
+        Log.d(LOG_TAG, "Initializing radio layout for group: " + (group == null ? "no group" : group.getName()));
         if (group == null) {
             return;
         }
@@ -217,6 +217,8 @@ public class RadioTabFragment extends Fragment {
     }
 
     private void initializeView(View view) {
+        Log.d(LOG_TAG, "Initializing view for group: " + (group == null ? "no group" : group.getName()));
+
         // Radio button layout
         initializeRadioLayout(view);
     }
@@ -233,7 +235,7 @@ public class RadioTabFragment extends Fragment {
      * @return a new fragment
      */
     public static RadioTabFragment newInstance(RadioGroupModel group) {
-        Log.d(LOG_TAG, "New instance of radio tab fragment for group " + group.getName());
+        Log.d(LOG_TAG, "New instance of radio tab fragment for group: " + group.getName());
 
         RadioTabFragment fragment = new RadioTabFragment();
 
