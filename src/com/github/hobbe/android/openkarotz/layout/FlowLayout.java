@@ -71,18 +71,34 @@ import com.github.hobbe.android.openkarotz.R;
  * </pre>
  */
 public class FlowLayout extends ViewGroup {
+
+    /**
+     * Initialize layout.
+     * @param context the context
+     */
     public FlowLayout(Context context) {
         super(context);
 
         this.readStyleParameters(context, null);
     }
 
+    /**
+     * Initialize layout.
+     * @param context the context
+     * @param attributeSet the set of attributes
+     */
     public FlowLayout(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
 
         this.readStyleParameters(context, attributeSet);
     }
 
+    /**
+     * Initialize layout.
+     * @param context the context
+     * @param attributeSet the set of attributes
+     * @param defStyle the default style
+     */
     public FlowLayout(Context context, AttributeSet attributeSet, int defStyle) {
         super(context, attributeSet, defStyle);
 
@@ -108,7 +124,7 @@ public class FlowLayout extends ViewGroup {
 
     @Override
     protected LayoutParams generateDefaultLayoutParams() {
-        return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        return new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     @Override
@@ -330,29 +346,60 @@ public class FlowLayout extends ViewGroup {
     }
 
 
+    /**
+     * Layout parameters for the flow layout.
+     */
     public static class LayoutParams extends ViewGroup.LayoutParams {
+
+        /**
+         * Initialize the layout parameters.
+         * @param context the context
+         * @param attributeSet the set of attributes
+         */
         public LayoutParams(Context context, AttributeSet attributeSet) {
             super(context, attributeSet);
             this.readStyleParameters(context, attributeSet);
         }
 
+        /**
+         * Initialize the layout parameters with width and height.
+         * @param width the width
+         * @param height the height
+         */
         public LayoutParams(int width, int height) {
             super(width, height);
         }
 
+        /**
+         * Initialize the layout parameters with view group layout parameters.
+         * @param layoutParams the layout parameters
+         */
         public LayoutParams(ViewGroup.LayoutParams layoutParams) {
             super(layoutParams);
         }
 
+        /**
+         * Indicates if horizontal spacing is specified.
+         * @return {@code true} if horizontal spacing is specified
+         */
         public boolean horizontalSpacingSpecified() {
             return horizontalSpacing != NO_SPACING;
         }
 
+        /**
+         * Set position.
+         * @param x the position on the x axis
+         * @param y the position on the y axis
+         */
         public void setPosition(int x, int y) {
             this.x = x;
             this.y = y;
         }
 
+        /**
+         * Indicates if vertical spacing is specified.
+         * @return {@code true} if vertical spacing is specified
+         */
         public boolean verticalSpacingSpecified() {
             return verticalSpacing != NO_SPACING;
         }
@@ -383,8 +430,10 @@ public class FlowLayout extends ViewGroup {
     }
 
 
+    /** Constant for HORIZONTAL (0) . */
     public static final int HORIZONTAL = 0;
 
+    /** Constant for VERTICAL (1) . */
     public static final int VERTICAL = 1;
 
     private int horizontalSpacing = 0;

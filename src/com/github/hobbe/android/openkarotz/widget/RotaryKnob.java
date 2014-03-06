@@ -46,7 +46,7 @@ import com.github.hobbe.android.openkarotz.R;
 public class RotaryKnob extends ImageView {
 
     /**
-     * Initiliaze the widget.
+     * Initialize the widget.
      * @param context the context
      */
     public RotaryKnob(Context context) {
@@ -55,7 +55,7 @@ public class RotaryKnob extends ImageView {
     }
 
     /**
-     * Initiliaze the widget.
+     * Initialize the widget.
      * @param context the context
      * @param attrs attribute set
      */
@@ -65,7 +65,7 @@ public class RotaryKnob extends ImageView {
     }
 
     /**
-     * Initiliaze the widget.
+     * Initialize the widget.
      * @param context the context
      * @param attrs attribute set
      * @param defStyle default style
@@ -162,16 +162,16 @@ public class RotaryKnob extends ImageView {
         });
     }
 
-    private void notifyChangeListener(int direction, float angle) {
+    private void notifyChangeListener(int direction, float angl) {
         if (null != listener) {
-            int arg = Math.round(angle);
+            int arg = Math.round(angl);
             listener.onKnobChanged(direction, arg);
         }
     }
 
-    private void notifyReleaseListener(int direction, float angle) {
+    private void notifyReleaseListener(int direction, float angl) {
         if (null != listener) {
-            int arg = Math.round(angle);
+            int arg = Math.round(angl);
             listener.onKnobReleased(direction, arg);
         }
     }
