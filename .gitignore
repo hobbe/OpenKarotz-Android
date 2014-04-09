@@ -2,6 +2,9 @@
 *.apk
 *.ap_
 
+# Except distributed files
+!dist/*.apk
+
 # Java class files
 *.class
 
